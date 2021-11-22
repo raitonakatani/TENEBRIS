@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="system">
+      <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="system\system.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="TIMER.cpp" />
+    <ClCompile Include="Enemy2.cpp" />
+    <ClCompile Include="Magic.cpp" />
+    <ClCompile Include="Enemy3.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="KAGI.cpp" />
+    <ClCompile Include="Enemy4.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="system\system.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="TIMER.h" />
+    <ClInclude Include="Enemy2.h" />
+    <ClInclude Include="Magic.h" />
+    <ClInclude Include="Enemy3.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="Fade.h" />
+    <ClInclude Include="GameClear.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="KAGI.h" />
+    <ClInclude Include="Enemy4.h" />
+  </ItemGroup>
+</Project>
