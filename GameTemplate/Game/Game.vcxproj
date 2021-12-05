@@ -152,19 +152,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="BackGround2.cpp" />
+    <ClCompile Include="CAMERA.cpp" />
+    <ClCompile Include="ClearCounter.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Enemy2.cpp" />
     <ClCompile Include="Enemy3.cpp" />
     <ClCompile Include="Enemy4.cpp" />
     <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="fastPlayer.cpp" />
+    <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
-    <ClCompile Include="KAGI.cpp" />
     <ClCompile Include="Magic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Portion.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -172,25 +178,35 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="TIMER.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="warp.cpp" />
+    <ClCompile Include="WarpCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="BackGround2.h" />
+    <ClInclude Include="CAMERA.h" />
+    <ClInclude Include="ClearCounter.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enemy2.h" />
     <ClInclude Include="Enemy3.h" />
     <ClInclude Include="Enemy4.h" />
     <ClInclude Include="Fade.h" />
+    <ClInclude Include="fastPlayer.h" />
+    <ClInclude Include="Fire.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameClear.h" />
-    <ClInclude Include="KAGI.h" />
     <ClInclude Include="Magic.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Portion.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="TIMER.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="warp.h" />
+    <ClInclude Include="WarpCounter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

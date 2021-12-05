@@ -15,6 +15,7 @@
 #include "sound/SoundSource.h"
 
 
+
 Enemy3::Enemy3()
 {
 
@@ -41,7 +42,7 @@ bool Enemy3::Start()
 	m_animationClips[enAnimationClip_Down].Load("Assets/animData/enemy3/sibou.tka");
 	m_animationClips[enAnimationClip_Down].SetLoopFlag(false);
 	//モデルを読み込む。
-	m_modelRender.Init("Assets/modelData/enemy2.tkm", m_animationClips, enAnimationClip_Num);
+	m_modelRender.Init("Assets/modelData/Enemy/enemy2.tkm", m_animationClips, enAnimationClip_Num);
 
 	//座標を設定する。
 	m_modelRender.SetPosition(m_position);
@@ -94,9 +95,21 @@ void Enemy3::Update()
 	ManageState();
 
 
-	Vector3 MODEL = m_player->GetPosition() - m_position;
-	if (MODEL.Length() <= 4000.0f)
+	modeltimer += g_gameTime->GetFrameDeltaTime();
+
+	if (m_model == 1)
 	{
+		if (model == false) {
+			//エフェクトのオブジェクトを作成する。
+			m_effectEmitter = NewGO <EffectEmitter>(0);
+			m_effectEmitter->Init(1);
+			m_effectEmitter->SetPosition(m_position);
+			//エフェクトの大きさを設定する。
+			m_effectEmitter->SetScale(m_scale * 20.0f);
+			m_effectEmitter->Play();
+			modeltimer = 0.0f;
+
+		}
 		model = true;
 	}
 	else {
@@ -114,8 +127,8 @@ void Enemy3::Update()
 
 	Vector3 diff = m_player->GetPosition() - m_position;
 
-	//ベクトルの長さが700.0fより小さかったら。
-	if (diff.Length() <= 1000.0f)
+	//ベクトルの長さが1200.0fより小さかったら。
+	if (diff.Length() <= 1200.0f)
 	{
 	/*	
 		//ワールド座標に変換。
@@ -284,7 +297,7 @@ const bool Enemy3::SearchPlayer() const
 	Vector3 diff = m_player->GetPosition() - m_position;
 
 	//プレイヤーにある程度近かったら.。
-	if (diff.LengthSq() <= 1000.0 * 1000.0f)
+	if (diff.LengthSq() <= 1200.0 * 1200.0f)
 	{
 		//エネミーからプレイヤーに向かうベクトルを正規化する。
 		diff.Normalize();
@@ -322,7 +335,7 @@ void Enemy3::MakeFireBall()
 	Magic* fireBall = NewGO<Magic>(0);
 	Vector3 fireBallPosition = m_position;
 	//座標を少し上にする。
-	fireBallPosition.y += 70.0f;
+	fireBallPosition.y += 150.0f;
 	//座標を設定する。
 	fireBall->SetPosition(fireBallPosition);
 	//回転を設定する。
@@ -368,8 +381,8 @@ void Enemy3::ProcessCommonStateTransition()
 			}
 			else
 			{
-				//待機ステートに遷移する。
-				m_Enemy3State = enEnemy3State_Idle;
+				//魔法攻撃ステートに遷移する。
+				m_Enemy3State = enEnemy3State_MagicAttack;
 				return;
 			}
 
@@ -379,7 +392,7 @@ void Enemy3::ProcessCommonStateTransition()
 		{
 			//乱数によって、追跡させるか魔法攻撃をするか決定する。	
 			int ram = rand() % 100;
-			if (ram > 40)
+			if (ram > 50)
 			{
 				//追跡ステートに遷移する。
 				m_Enemy3State = enEnemy3State_Chase;
@@ -619,9 +632,17 @@ const bool Enemy3::IsCanAttack() const
 	return false;
 }
 
+void Enemy3::MODEL()
+{
+	m_model = 1;
+
+
+
+}
+
 void Enemy3::Render(RenderContext& rc)
 {
-	if (model == true)
+	if (model == true && modeltimer > 2.5f)
 	{
 		//モデルを描画する。
 		m_modelRender.Draw(rc);

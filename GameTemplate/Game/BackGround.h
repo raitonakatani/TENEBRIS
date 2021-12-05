@@ -13,13 +13,13 @@ public:
 	void Render(RenderContext& rc);
 
 	//À•W‚ğİ’èB
-	void SetPosition(Vector3 position)
+	void SetPosition(const Vector3 position)
 	{
 		m_position = position;
 	}
 
 	//‰ñ“]‚ğİ’èB
-	void SetRotation(Quaternion rotation)
+	void SetRotation(const Quaternion rotation)
 	{
 		m_rotation = rotation;
 	}

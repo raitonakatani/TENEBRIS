@@ -17,12 +17,14 @@ public:
 		enEnemyState_Attack,				//攻撃。
 		enEnemyState_ReceiveDamage,			//被ダメージ。
 		enEnemyState_Down,					//ダウン。
+		enEnemyState_model
 	};
 public:
 	Enemy();
 	~Enemy();
 	bool Start();
 	void Update();
+	void MODEL();
 	void Render(RenderContext& rc);
 	/// <summary>
 	/// 座標を設定する。
@@ -63,6 +65,22 @@ public:
 	void SetScale(const Vector3& scale)
 	{
 		m_scale = scale;
+	}
+	/// <summary>
+	/// 騎士の番号を設定する。
+	/// </summary>
+	/// <param name="kisiNumber">騎士の番号。</param>
+	void SetkisiNumber(const int kisiNumber)
+	{
+		m_kisiNumber = kisiNumber;
+	}
+	/// <summary>
+	/// 騎士の番号を取得する。
+	/// </summary>
+	/// <returns>騎士の番号。</returns>
+	const int GetkisiNumber() const
+	{
+		return m_kisiNumber;
 	}
 
 
@@ -162,17 +180,20 @@ private:
 	Vector3						m_scale = Vector3(3.0f, 3.0f, 3.0f);		//大きさ。
 	CharacterController			m_charaCon;									//キャラコン。
 	EnEnemyState				m_enemyState = enEnemyState_Idle;			//エネミーステート。
+	EffectEmitter* m_effectEmitter = nullptr;			//エフェクト。
 	Game* m_game = nullptr;
 	SpriteRender				m_spriteRender;								//画像。
 	bool						m_isUnderAttack = false;					//攻撃中か？
-	float							m_hp = 7;									//HP。
+	float							m_hp = 1;									//HP。
 	int						  m_swordBoneId = -1;                 //剣のボーンのID。
 	Player* m_player = nullptr;							//プレイヤー。
 	float						m_chaseTimer = 0.0f;						//追跡タイマー。
 	float						m_idleTimer = 0.0f;							//待機タイマー。
+	float modeltimer = 0.0f;
 	float						a = 0.0f;			//拡大率
 	bool						m_isShowHPBar = false;
 	bool model = false;
 	int karyoku = 1;
-	//int level = 5;
+	int m_kisiNumber = 0;
+	int m_model = 0;
 };

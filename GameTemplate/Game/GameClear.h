@@ -1,6 +1,8 @@
 #pragma once
 
 class Fade;
+class ClearCounter;
+class WarpCounter;
 
 class GameClear : public IGameObject
 {
@@ -18,5 +20,9 @@ private:
 	bool m_isWaitFadeout = false;
 	Fade* m_fade = nullptr;           //フェード。
 	SpriteRender m_spriteRender;        //スプライトレンダー。
+	float					m_alpha = 0.0f;					//pressbuttonのα値。
+	SpriteRender			m_pressButton;					//pressbuttonの画像。
+	ClearCounter* clearCounter = nullptr;
+	WarpCounter* warpCounter = nullptr;
 };
 

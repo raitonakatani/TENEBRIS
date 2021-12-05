@@ -17,12 +17,14 @@ public:
 		enEnemy4State_MagicAttack,			//魔法攻撃。
 		enEnemy4State_ReceiveDamage,		//被ダメージ。
 		enEnemy4State_Down,					//ダウン。
+		enEnemy4State_model
 	};
 public:
 	Enemy4();
 	~Enemy4();
 	bool Start();
 	void Update();
+	void MODEL();
 	void Render(RenderContext& rc);
 	/// <summary>
 	/// 座標を設定する。
@@ -64,7 +66,22 @@ public:
 	{
 		m_scale = scale;
 	}
-
+	/// <summary>
+	///中ボスの番号を設定する。
+	/// </summary>
+	/// <param name="tyuubossNumber">中ボスの番号。</param>
+	void SettyuubossNumber(const int tyuubossNumber)
+	{
+		m_tyuubossNumber = tyuubossNumber;
+	}
+	/// <summary>
+	/// ドアの番号を取得する。
+	/// </summary>
+	/// <returns>ドアの番号。</returns>
+	const int GettyuubossNumber() const
+	{
+		return m_tyuubossNumber;
+	}
 
 
 private:
@@ -170,7 +187,7 @@ private:
 	SpriteRender				m_spriteRender;								//画像。
 	bool						m_isUnderAttack = false;					//攻撃中か？
 	int							m_swordBoneId = -1;							//剣のボーンのID。
-	float						m_hp = 15;									//HP。
+	float						m_hp = 10;									//HP。
 	Player* m_player = nullptr;												//プレイヤー。
 	float						m_chaseTimer = 0.0f;						//追跡タイマー。
 	float						m_idleTimer = 0.0f;							//待機タイマー。
@@ -178,6 +195,7 @@ private:
 	bool						m_isShowHPBar = false;
 	bool model = false;
 	int karyoku = 1;
+	int m_tyuubossNumber = 0;
 };
 
 

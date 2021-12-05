@@ -7,15 +7,21 @@
 
 //クラス宣言。
 class Player;
+class fastPlayer;
 class GameCamera;
+class CAMERA;
 class BackGround;
+class BackGround2;
 class Enemy;
 class Enemy2;
 class TIMER;
 class Fade;
+class warp;
 class Door;
-class KAGI;
-//class SkyCube;
+class Menu;
+class ClearCounter;
+class Portion;
+class Fire;
 
 class Game : public IGameObject
 {
@@ -24,14 +30,6 @@ public:
 	~Game();
 	bool Start();
 	void Update();
-	/// <summary>
-	/// ゲームクリアーを通知する。
-	/// </summary>
-	void NotifyGameClear();
-	/// <summary>
-	/// ゲームオーバーを通知する。
-	/// </summary>
-	void NotifyGameOver();
 	/// <summary>
 	/// エネミーを全滅させた？
 	/// </summary>
@@ -70,13 +68,23 @@ public:
 	//void ManageState();
 	void Render(RenderContext& rc);
 
+	bool IsMove() const
+	{
+		return m_menu == true;
+	}
+
+
 private:
 	Player*						m_player;						//プレイヤー。
+	fastPlayer* m_fastplayer;
+	Fire* m_fire;
 	Door*						m_door;							//ドア。
 	SkyCube*					m_skycube;						//スカイキューブ。
 	TIMER*						m_TIMER;						//タイマー。
-	GameCamera*					m_gameCamera;					//ゲームカメラ。
+	GameCamera* m_gameCamera = nullptr;					//ゲームカメラ。
+	CAMERA* m_camera;
 	BackGround*					m_background;					//ステージ。
+	BackGround2*				m_background2;					//ステージ。
 	ModelRender					m_modelRender;					//モデルレンダー。
 	SpriteRender				m_spriteRender;					//画像。
 	FontRender					m_fontRender;					//文字。
@@ -85,6 +93,10 @@ private:
 	Vector3						m_position;						//座標。
 	LevelRender					m_levelRender;					//レベルレンダー。
 	Fade*						m_fade = nullptr;				//フェード。
+	Menu* menu=nullptr;
+	warp* m_Warp;
+	ClearCounter* clearCounter=nullptr;
+	Portion* portion;
 	bool						m_isWaitFadeout = false;
 	bool						m_menu = false;
 	int							m_sibouEnemy = 5;
@@ -96,5 +108,12 @@ private:
 
 	bool sibou = false;
 	float siboutimer = 0.0f;
+
+	bool WARP = false;
+
+	bool KISI = false;
+	bool MAHOU = false;
+	bool m_BOSS = false;
+	bool DOOR = false;
 };
 

@@ -8,6 +8,8 @@
 #include "Title.h"
 #include "Fade.h"
 
+#include "ClearCounter.h"
+#include "WarpCounter.h"
 
 void ReportLiveObjects()
 {
@@ -42,6 +44,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	NewGO<Title>(0, "title");
 	NewGO<Fade>(0, "fade");
+
+	auto clearCounter = NewGO<ClearCounter>(0, "ClearCounter");
+
+	auto warpCounter = NewGO<WarpCounter>(0, "WarpCounter");
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

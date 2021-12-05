@@ -17,12 +17,14 @@ public:
 		enEnemy2State_MagicAttack,				//攻撃。
 		enEnemy2State_ReceiveDamage,			//被ダメージ。
 		enEnemy2State_Down,					//ダウン。
+		enEnemy2State_model
 	};
 public:
 	Enemy2();
 	~Enemy2();
 	bool Start();
 	void Update();
+	void MODEL();
 	void Render(RenderContext& rc);
 	/// <summary>
 	/// 座標を設定する。
@@ -64,7 +66,22 @@ public:
 	{
 		m_scale = scale;
 	}
-
+	/// <summary>
+	/// 魔法使いの番号を設定する。
+	/// </summary>
+	/// <param name="wizardNumber">	魔法使いの番号。</param>
+	void SetwizardNumber(const int wizardNumber)
+	{
+		m_wizardNumber = wizardNumber;
+	}
+	/// <summary>
+	/// ドアの番号を取得する。
+	/// </summary>
+	/// <returns>ドアの番号。</returns>
+	const int GetwizardNumber() const
+	{
+		return m_wizardNumber;
+	}
 
 private:
 	/// <summary>
@@ -150,20 +167,25 @@ private:
 	Vector3						m_moveSpeed;								//移動速度。
 	Vector3						m_forward = Vector3::AxisZ;					//エネミーの正面ベクトル。
 	Quaternion					m_rotation;									//回転。
-	Vector3						m_scale = Vector3(3.0f, 3.0f, 3.0f);						//大きさ。
+	Vector3						m_scale = Vector3(3.0f, 3.0f, 3.0f);		//大きさ。
 	CharacterController			m_charaCon;									//キャラコン。
+	EffectEmitter*				m_effectEmitter = nullptr;					//エフェクト。
 	enEnemy2State				m_enemy2State = enEnemy2State_Idle;			//エネミーステート。
-	Game* m_game = nullptr;
+	Game*						m_game = nullptr;
 	SpriteRender				m_spriteRender;								//画像。
 	bool						m_isUnderAttack = false;					//攻撃中か？
-	float							m_hp = 5;									//HP。
-	int						  m_swordBoneId = -1;                 //剣のボーンのID。
-	Player* m_player = nullptr;							//プレイヤー。
+	float						m_hp = 3;									//HP。
+	int							m_swordBoneId = -1;							//剣のボーンのID。
+	Player*						m_player = nullptr;							//プレイヤー。
 	float						m_chaseTimer = 0.0f;						//追跡タイマー。
 	float						m_idleTimer = 0.0f;							//待機タイマー。
 	float						m_sibouTimer = 0.0f;						//待機タイマー。
 	float						a = 0.0f;			//拡大率
 	bool						m_isShowHPBar = false;
 	bool model = false;
+	float modeltimer = 0.0f;
+	int m_model = 0;
+	bool sibou = false;
 	int karyoku = 1;
+	int m_wizardNumber = 0;
 };

@@ -4,7 +4,6 @@
 #include "Game.h"
 #include "Magic.h"
 #include "Player.h"
-#include "KAGI.h"
 
 #include "collision/CollisionObject.h"
 #include "graphics/effect/EffectEmitter.h"
@@ -42,7 +41,7 @@ bool Enemy4::Start()
 	m_animationClips[enAnimationClip_Down].Load("Assets/animData/Enemy3/sibou.tka");
 	m_animationClips[enAnimationClip_Down].SetLoopFlag(false);
 	//モデルを読み込む。
-	m_modelRender.Init("Assets/modelData/enemy2.tkm", m_animationClips, enAnimationClip_Num);
+	m_modelRender.Init("Assets/modelData/Enemy/enemy2.tkm", m_animationClips, enAnimationClip_Num);
 
 	//座標を設定する。
 	m_modelRender.SetPosition(m_position);
@@ -95,7 +94,7 @@ void Enemy4::Update()
 	//ステートの遷移処理。
 	ManageState();
 
-
+/*
 	Vector3 MODEL = m_player->GetPosition() - m_position;
 	if (MODEL.Length() <= 4000.0f)
 	{
@@ -104,7 +103,7 @@ void Enemy4::Update()
 	else {
 		model = false;
 	}
-
+*/
 
 	if (m_hp <= 0)
 	{
@@ -491,7 +490,7 @@ void Enemy4::ProcessDownStateTransition()
 	if (m_modelRender.IsPlayingAnimation() == false)
 	{
 		Game* game = FindGO<Game>("game");
-		KAGI* kagi = NewGO<KAGI>(0);
+		
 		//音を読み込む。
 		g_soundEngine->ResistWaveFileBank(1, "Assets/sound/1sibouzi.wav");
 		//効果音を再生する。
@@ -499,7 +498,7 @@ void Enemy4::ProcessDownStateTransition()
 		se->Init(1);
 		se->Play(false);
 		se->SetVolume(1.5f);
-		kagi->SetPosition({ m_position.x,900.0f,m_position.z });
+	
 		//倒されたエネミーの数を+1する。
 		game->AddDefeatedEnemyNumber();
 		//自身を削除する。
@@ -619,6 +618,11 @@ const bool Enemy4::IsCanAttack() const
 	}
 	//攻撃できない。
 	return false;
+}
+
+void Enemy4::MODEL()
+{
+	model = true;
 }
 
 void Enemy4::Render(RenderContext& rc)

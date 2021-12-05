@@ -3,7 +3,7 @@
 
 #include "Game.h"
 #include "Player.h"
-
+#include"Portion.h"
 #include <stdlib.h>
 
 //CollisionObjectを使用したいため、ファイルをインクルードする。
@@ -11,6 +11,9 @@
 
 #include "sound/SoundEngine.h"
 #include "sound/SoundSource.h"
+
+//EffectEmitterを使用するために、ファイルをインクルードする。
+#include "graphics/effect/EffectEmitter.h"
 
 
 
@@ -46,7 +49,13 @@ bool Enemy::Start()
 	m_animationClips[enAnimationClip_Down].SetLoopFlag(false);
 
 	//モデルを読み込む。
-	m_modelRender.Init("Assets/modelData/enemy2.tkm", m_animationClips, enAnimationClip_Num);
+	m_modelRender.Init("Assets/modelData/Enemy/enemy2.tkm", m_animationClips, enAnimationClip_Num);
+
+	//エフェクトを読み込む。
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/enemy.efk");
+
+	//エフェクトを読み込む。
+	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/efk/Magic.efk");
 
 	//座標を設定する。
 	Vector3 position = m_position;
@@ -102,9 +111,23 @@ void Enemy::Update()
 	//ステートの遷移処理。
 	ManageState();
 
-	Vector3 MODEL = m_player->GetPosition() - m_position;
-	if (MODEL.Length() <= 4000.0f)
+
+	modeltimer += g_gameTime->GetFrameDeltaTime();
+
+	if (m_model == 1)
 	{
+		if (model == false) {
+			//エフェクトのオブジェクトを作成する。
+			m_effectEmitter = NewGO <EffectEmitter>(0);
+			m_effectEmitter->Init(1);
+			m_effectEmitter->SetPosition(m_position);
+			//エフェクトの大きさを設定する。
+			m_effectEmitter->SetScale(m_scale * 15.0f);
+			m_effectEmitter->Play();
+		
+			modeltimer = 0.0f;
+
+		}
 		model = true;
 	}
 	else {
@@ -480,6 +503,12 @@ void Enemy::ProcessDownStateTransition()
 	if (m_modelRender.IsPlayingAnimation() == false)
 	{
 		Game* game = FindGO<Game>("game");
+		int radm = rand() % 100;
+		if (radm >= 70) {
+			Portion* portion = NewGO<Portion>(0, "portion");
+			portion->SetPosition(m_position);
+		}
+
 		//音を読み込む。
 		g_soundEngine->ResistWaveFileBank(1, "Assets/sound/1sibouzi.wav");
 		//効果音を再生する。
@@ -490,6 +519,12 @@ void Enemy::ProcessDownStateTransition()
 		//倒されたエネミーの数を+1する。
 		game->AddDefeatedEnemyNumber();
 		game->SetnumEnemydesu();
+
+/*		if (radm > 20)
+		{
+			Portion* portion = NewGO<Portion>(0, "portion");
+		}
+*/
 		//自身を削除する。
 		DeleteGO(this);
 	}
@@ -592,9 +627,16 @@ const bool Enemy::IsCanAttack() const
 	return false;
 }
 
+
+void Enemy::MODEL()
+{
+	m_model = 1;
+
+}
+
 void Enemy::Render(RenderContext& rc)
 {
-	if (model == true)
+	if (model == true && modeltimer > 2.5f)
 	{
 		//モデルを描画する。
 		m_modelRender.Draw(rc);

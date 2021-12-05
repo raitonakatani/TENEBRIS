@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Door.h"
 #include "Player.h"
+#include "Enemy.h"
+#include "Enemy2.h"
+#include "Enemy3.h"
+#include "Enemy4.h"
 
 Door::Door()
 {
@@ -60,20 +64,20 @@ void Door::Update()
 
 			//if (m_player->GetKAGI() == 1)
 			//{
-				m_fontRender.SetText(L"カギを使う。\nAボタン");
+				m_fontRender.SetText(L"扉を開ける。\nAボタン");
 				//表示する座標を設定する。
 				m_fontRender.SetPosition({ -100.0f,300.0f,0.0f });
 				//文字の大きさを変える。
 				//fontRender.SetScale(1.5f);
 				//表示する色を設定する。
-				m_fontRender.SetColor(g_vec4Black);
+				m_fontRender.SetColor(g_vec4White);
+
 
 				if (g_pad[0]->IsTrigger(enButtonA))
 				{
 					NotifyOpen();
 				}
-
-			//}
+				//}
 		/*	else if (m_player->GetKAGI() == 0)
 			{
 				m_fontRender2.SetText(L"カギを所持していません。");
@@ -151,13 +155,62 @@ void Door::CreatePhysicsObject()
 
 void Door::ProcessOpenStateTransition()
 {
+	if (m_modelRender.IsPlayingAnimation() == true) {
+		//当たり判定を開放する。
+		ReleasePhysicsObject();
+	}
+
 	//オープンアニメーションの再生が終了したら。
 	if (m_modelRender.IsPlayingAnimation() == false)
 	{
 		//当たり判定を開放する。
-		ReleasePhysicsObject();
+		//ReleasePhysicsObject();
 		//オープン終わりステートに遷移する。
 		m_doorState = enDoorState_Open_Idle;
+
+		auto enemys = FindGOs<Enemy>("enemy");
+		for (auto enemy : enemys)
+		{
+			for (int i = 0;i < 3;i++) {
+				//騎士を召喚。
+				if (m_doorNumber == enemy->GetkisiNumber())
+				{
+
+					enemy->MODEL();
+					break;
+				}
+			}
+		}
+
+		auto wizards = FindGOs<Enemy2>("enemy2");
+		for (auto wizard : wizards) {
+			for (int i = 0;i < 3;i++) {
+				//魔法使いを召喚。
+				if (m_doorNumber == wizard->GetwizardNumber())
+				{
+					wizard->MODEL();
+					break;
+				}
+			}
+		}
+
+		auto bosss = FindGOs<Enemy3>("enemy3");
+		for (auto boss : bosss) {
+
+			//ボスを召喚。
+			if (m_doorNumber == boss->GetbossNumber())
+			{
+				boss->MODEL();
+				break;
+			}
+		}
+
+		/*	//中ボスを召喚。
+			if (m_doorNumber == tyuuboss->GettyuubossNumber())
+			{
+				tyuuboss->MODEL();
+			}
+		*/
 	}
 }
 
@@ -215,10 +268,6 @@ void Door::Render(RenderContext& rc)
 		//文字を描写する。
 		m_fontRender.Draw(rc);
 
-		if (m_player->GetKAGI() == 0)
-		{
-			m_fontRender2.Draw(rc);
-		}
 	}
 	else {
 		return;

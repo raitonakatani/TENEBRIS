@@ -18,7 +18,8 @@ Portion::~Portion()
 bool Portion::Start()
 {
 	//☆のモデルを読み込む。
-	m_modelRender.Init("Assets/modelData/rin.tkm");
+	m_modelRender.Init("Assets/modelData/Portion/Portion.tkm");
+	//m_modelRender.SetScale(100.0f, 100.0f, 100.0f);
 	//Portion
 	//プレイヤーのオブジェクトを探して持ってくる。
 	m_player = FindGO<Player>("player");

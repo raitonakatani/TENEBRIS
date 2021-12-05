@@ -24,8 +24,16 @@
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="Door.cpp" />
-    <ClCompile Include="KAGI.cpp" />
     <ClCompile Include="Enemy4.cpp" />
+    <ClCompile Include="Portion.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="warp.cpp" />
+    <ClCompile Include="fastPlayer.cpp" />
+    <ClCompile Include="CAMERA.cpp" />
+    <ClCompile Include="ClearCounter.cpp" />
+    <ClCompile Include="BackGround2.cpp" />
+    <ClCompile Include="WarpCounter.cpp" />
+    <ClCompile Include="Fire.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -45,7 +53,15 @@
     <ClInclude Include="Fade.h" />
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="Door.h" />
-    <ClInclude Include="KAGI.h" />
     <ClInclude Include="Enemy4.h" />
+    <ClInclude Include="Portion.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="warp.h" />
+    <ClInclude Include="fastPlayer.h" />
+    <ClInclude Include="CAMERA.h" />
+    <ClInclude Include="ClearCounter.h" />
+    <ClInclude Include="BackGround2.h" />
+    <ClInclude Include="WarpCounter.h" />
+    <ClInclude Include="Fire.h" />
   </ItemGroup>
 </Project>

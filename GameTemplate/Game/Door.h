@@ -102,7 +102,6 @@ private:
 	Quaternion					m_rotation;								//回転。
 	Vector3						m_scale = Vector3::One;					//大きさ。
 	FontRender					m_fontRender;							//カギを所持しているとき。
-	FontRender					m_fontRender2;							//カギを所持してないとき。
 	enum EnAnimationClip {												//アニメーション。
 		enAnimationClip_Idle,											//待機。	
 		enAnimationClip_Open,											//オープン。
@@ -115,5 +114,6 @@ private:
 	Player*						m_player;								//プレイヤー。
 	bool						door = false;							//ドアとの距離。
 	int							m_doorNumber = 0;						//ドアの番号。
+	bool model = false;
 };
 

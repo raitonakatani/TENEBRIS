@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "Magic.h"
 #include "Player.h"
-
+#include "Portion.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -42,7 +42,7 @@ bool Enemy2::Start()
 	m_animationClips[enAnimationClip_Down].Load("Assets/animData/Enemy2/sibou.tka");
 	m_animationClips[enAnimationClip_Down].SetLoopFlag(false);
 	//モデルを読み込む。
-	m_modelRender.Init("Assets/modelData/wizard.tkm", m_animationClips, enAnimationClip_Num);
+	m_modelRender.Init("Assets/modelData/Enemy/wizard.tkm", m_animationClips, enAnimationClip_Num);
 
 	//座標を設定する。
 	m_modelRender.SetPosition(m_position);
@@ -57,6 +57,11 @@ bool Enemy2::Start()
 		150.0f,			//高さ。
 		m_position		//座標。
 	);
+
+
+	//エフェクトを読み込む。
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/enemy.efk");
+
 
 	//アニメーションイベント用の関数を設定する。
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
@@ -90,9 +95,22 @@ void Enemy2::Update()
 	//ステートの遷移処理。
 	ManageState();
 
-	Vector3 MODEL = m_player->GetPosition() - m_position;
-	if (MODEL.Length() <= 4000.0f)
+
+	modeltimer += g_gameTime->GetFrameDeltaTime();
+
+	if (m_model == 1)
 	{
+		if (model == false) {
+			//エフェクトのオブジェクトを作成する。
+			m_effectEmitter = NewGO <EffectEmitter>(0);
+			m_effectEmitter->Init(1);
+			m_effectEmitter->SetPosition(m_position);
+			//エフェクトの大きさを設定する。
+			m_effectEmitter->SetScale(m_scale * 15.0f);
+			m_effectEmitter->Play();
+			modeltimer = 0.0f;
+
+		}
 		model = true;
 	}
 	else {
@@ -112,7 +130,7 @@ void Enemy2::Update()
 	Vector3 diff = m_player->GetPosition() - m_position;
 
 	//ベクトルの長さが1000.0fより小さかったら。
-	if (diff.Length() <= 1200.0f)
+	if (diff.Length() <= 1000.0f)
 	{
 		//ワールド座標に変換。
 		//座標をエネミーの少し上に設定する。
@@ -169,30 +187,34 @@ void Enemy2::Update()
 
 void Enemy2::Rotation()
 {
-	if (fabsf(m_moveSpeed.x) < 0.001f
-		&& fabsf(m_moveSpeed.z) < 0.001f) {
-		//m_moveSpeed.xとm_moveSpeed.zの絶対値がともに0.001以下ということは
-		//このフレームではキャラは移動していないので旋回する必要はない。
-		return;
+	if (sibou == false)
+	{
+		if (fabsf(m_moveSpeed.x) < 0.001f
+			&& fabsf(m_moveSpeed.z) < 0.001f) {
+			//m_moveSpeed.xとm_moveSpeed.zの絶対値がともに0.001以下ということは
+			//このフレームではキャラは移動していないので旋回する必要はない。
+			return;
+		}
+		//atan2はtanθの値を角度(ラジアン単位)に変換してくれる関数。
+		//m_moveSpeed.x / m_moveSpeed.zの結果はtanθになる。
+		//atan2を使用して、角度を求めている。
+		//これが回転角度になる。
+
+		Vector3 diff = m_player->GetPosition() - m_position;
+
+		float angle = atan2(-diff.x, diff.z);
+		//atanが返してくる角度はラジアン単位なので
+		//SetRotationDegではなくSetRotationを使用する。
+		m_rotation.SetRotationY(-angle);
+
+
+		//回転を設定する。
+		m_modelRender.SetRotation(m_rotation);
+
+		//プレイヤーの前ベクトルを計算する。
+		m_forward = Vector3::AxisZ;
+		m_rotation.Apply(m_forward);
 	}
-	//atan2はtanθの値を角度(ラジアン単位)に変換してくれる関数。
-	//m_moveSpeed.x / m_moveSpeed.zの結果はtanθになる。
-	//atan2を使用して、角度を求めている。
-	//これが回転角度になる。
-
-	Vector3 diff = m_player->GetPosition() - m_position;
-
-	float angle = atan2(-diff.x, diff.z);
-	//atanが返してくる角度はラジアン単位なので
-	//SetRotationDegではなくSetRotationを使用する。
-	m_rotation.SetRotationY(-angle);
-
-	//回転を設定する。
-	m_modelRender.SetRotation(m_rotation);
-
-	//プレイヤーの前ベクトルを計算する。
-	m_forward = Vector3::AxisZ;
-	m_rotation.Apply(m_forward);
 }
 
 void Enemy2::Chase()
@@ -245,12 +267,14 @@ void Enemy2::Collision()
 			//もしHPが0より上なら。
 			if (m_hp > 0)
 			{
+				sibou = false;
 				//被ダメージステートに遷移する。
 				m_enemy2State = enEnemy2State_ReceiveDamage;
 			}
 			//HPが0なら。
 			else if (m_hp <= 0)
 			{
+				sibou = true;
 				//ダウンステートに遷移する。
 				m_enemy2State = enEnemy2State_Down;
 			}
@@ -268,7 +292,7 @@ const bool Enemy2::SearchPlayer() const
 	Vector3 diff = m_player->GetPosition() - m_position;
 
 	//プレイヤーにある程度近かったら.。
-	if (diff.LengthSq() <= 1200.0f * 1200.0f)
+	if (diff.LengthSq() <= 1000.0f * 1000.0f)
 	{
 		//エネミーからプレイヤーに向かうベクトルを正規化する。
 		diff.Normalize();
@@ -459,6 +483,11 @@ void Enemy2::ProcessDownStateTransition()
 	if (m_modelRender.IsPlayingAnimation() == false)
 	{
 		Game* game = FindGO<Game>("game");
+		int radm = rand() % 100;
+		if (radm >= 70) {
+			Portion* portion = NewGO<Portion>(0,"portion");
+			portion->SetPosition(m_position);
+		}
 		//音を読み込む。
 		g_soundEngine->ResistWaveFileBank(1, "Assets/sound/1sibouzi.wav");
 		//効果音を再生する。
@@ -469,10 +498,21 @@ void Enemy2::ProcessDownStateTransition()
 		//倒されたエネミーの数を+1する。
 		game->AddDefeatedEnemyNumber();
 		game->SetnumEnemydesu();
+		
+/*		int ram = rand() % 100;
+
+		if (ram > 20)
+		{
+			Portion* portion = NewGO<Portion>(0, "portion");
+		}
+*/
+
 		//自身を削除する。
 		DeleteGO(this);
 	}
 }
+
+
 
 void Enemy2::ManageState()
 {
@@ -558,7 +598,7 @@ const bool Enemy2::IsCanAttack() const
 {
 	Vector3 diff = m_player->GetPosition() - m_position;
 	//エネミーとプレイヤーの距離が近かったら。
-	if (diff.LengthSq() <= 700.0f * 700.0f)
+	if (diff.LengthSq() <= 600.0f * 600.0f)
 	{
 		//攻撃できる！
 		return true;
@@ -566,9 +606,16 @@ const bool Enemy2::IsCanAttack() const
 	return false;
 }
 
+
+void Enemy2::MODEL()
+{
+	m_model = 1;
+
+}
+
 void Enemy2::Render(RenderContext& rc)
 {
-	if (model == true)
+	if (model == true && modeltimer > 2.5f)
 	{
 		//モデルを描画する。
 		m_modelRender.Draw(rc);

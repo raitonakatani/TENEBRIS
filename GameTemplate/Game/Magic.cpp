@@ -30,6 +30,9 @@ bool Magic::Start()
 	//エフェクトを読み込む。
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/efk/Magic.efk");
 
+	//エフェクトを読み込む。
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/efk/enemy.efk");
+
 	//エフェクトのオブジェクトを作成する。
 	m_effectEmitter = NewGO <EffectEmitter>(0);
 	m_effectEmitter->Init(0);
@@ -105,7 +108,7 @@ void Magic::Update()
 	//タイマーを加算する。
 	m_timer += g_gameTime->GetFrameDeltaTime();
 
-	//タイマーが0.7f以上だったら。
+	//タイマーが1.0f以上だったら。
 	if (m_timer >= 1.0f)
 	{
 		//自身を削除する。
