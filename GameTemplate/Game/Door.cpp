@@ -128,7 +128,7 @@ void Door::PlayAnimation()
 	case enDoorState_Open:
 		//オープンアニメーションを再生する。
 		m_modelRender.PlayAnimation(enAnimationClip_Open);
-		m_modelRender.SetAnimationSpeed(0.6f);
+		m_modelRender.SetAnimationSpeed(1.2f);
 		break;
 		//クローズステートの時。
 	case enDoorState_Close:

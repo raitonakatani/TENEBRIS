@@ -67,7 +67,7 @@ bool Enemy3::Start()
 		OnAnimationEvent(clipName, eventName);
 		});
 
-	m_spriteRender.Init("Assets/sprite/HP2.dds", 64.0f, 32.0f);
+	m_spriteRender.Init("Assets/sprite/HP.dds", 64.0f, 32.0f);
 	//•\¦‚·‚éÀ•W‚ğİ’è‚·‚éB
 	m_spriteRender.SetPosition({ 0.0f,450.0f ,0.0f });
 

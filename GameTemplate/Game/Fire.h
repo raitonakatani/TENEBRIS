@@ -1,7 +1,8 @@
 #pragma once
-#pragma once
 
 class Player;
+class fastPlayer;
+class WarpCounter;
 
 //☆クラス。
 class Fire : public IGameObject
@@ -14,6 +15,7 @@ public:
 	void Update();
 	//描画処理。
 	void Render(RenderContext& rc);
+	void CreateFireEffect();
 	/// <summary>
 	/// 座標を設定。
 	/// </summary>
@@ -41,12 +43,15 @@ private:
 	Vector3 m_position;                  //座標。
 	int moveState = 0;                   //上に移動か下に移動か。
 	Player* m_player;                   //プレイヤー。
+	fastPlayer* m_fastplayer;
 	SoundSource* se;                    //se
 	EffectEmitter* m_effectEmitter = nullptr;					//エフェクト。
 	Quaternion		m_rotation;
 	PhysicsStaticObject m_physicsStaticObject;      //静的物理オブジェクト。
 	Vector3			m_scale;
 	PointLight* m_pointLight = nullptr;
+	WarpCounter* warpCounter = nullptr;
+	bool model = true;
 };
 
 

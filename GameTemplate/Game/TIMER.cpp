@@ -26,11 +26,11 @@ void TIMER::Update()
 	//テキストの表示
 	fontRender2.SetText(wcsbuf);
 	//表示する座標を設定する。
-	fontRender2.SetPosition({ -600.0f,300.0f,0.0f });
+	fontRender2.SetPosition({ -620.0f,300.0f,0.0f });
 	//文字の大きさを変える。
 	fontRender2.SetScale(2.0f);
 	//表示する色を設定する。
-	fontRender2.SetColor(g_vec4White);
+	fontRender2.SetColor(g_vec4White);//g_vec4Black
 }
 
 void TIMER::Render(RenderContext& rc)

@@ -91,7 +91,7 @@ public:
 	/// HPを設定
 	/// </summary>
 	/// <param name="hp">HP。</param>
-	void SetPlayerHP(const float& hp)
+	void SetPlayerHP(const int& hp)
 	{
 		m_hp=hp;
 	}
@@ -99,9 +99,19 @@ public:
 	/// HPを取得。
 	/// </summary>
 	/// <param name="hp">HP。</param>
-	const float& GetPlayerHP()const
+	const int& GetPlayerHP()const
 	{
 		return m_hp;
+	}
+
+	void SetPlayerHP(const float& sutamina)
+	{
+		m_sutamina = sutamina;
+	}
+
+	const float& GetPlayerStamina()const
+	{
+		return m_sutamina;
 	}
 
 	/// <summary>
@@ -244,14 +254,12 @@ private:
 	Quaternion				m_rotation;									//クォータニオン。
 	CharacterController		m_charaCon;									//キャラクターコントローラー。
 	EnPlayerState			m_playerState = enPlayerState_Idle;			//プレイヤーステート。
-	SpriteRender			m_HPRender;						        //画像。
-	SpriteRender m_staminaRender;
-
+	SpriteRender			m_HPRender;							        //画像。
+	SpriteRender			m_staminaRender;
 	SpriteRender			m_HPberRender;						        //画像。
-	SpriteRender m_stmnberRender;
-
-
+	SpriteRender			m_stmnberRender;
 	SpriteRender			m_portionRender;							//ポーション。
+	SpriteRender			m_statusRender;
 	FontRender				m_fontRender;								//文字　HPの表示。
 	FontRender				m_staminaRender2;								//文字　staminaの表示。
 	FontRender				m_fontRender2;					            //文字　Levelの表示。
@@ -267,10 +275,8 @@ private:
 	int                     m_sword_jointBoneId = -1;                   //「Sword」ボーンのID。
 	float m_sutamina = 150.0f;		//スタミナ。
 	float m_hurusutamina = 150.0f;	//フルスタミナ。
-
 	float hpber = 1.0f;
 	float stmnber = 1.0f;
-
 	float					m_timer = 0.0f;								//タイマー。
 	int						m_portion = 0;								//ポーション。
 	int						m_boss = 0;									//ボス。

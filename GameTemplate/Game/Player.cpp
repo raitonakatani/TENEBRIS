@@ -47,28 +47,31 @@ bool Player::Start()
 		OnAnimationEvent(clipName, eventName);});
 
 
-	m_HPberRender.Init("Assets/sprite/HP2.dds", 512.0f, 32.0f);
+	m_HPberRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
 	//表示する座標を設定する。
 	m_HPberRender.SetPosition({ -694.0f,450.0f ,0.0f });
 	m_HPRender.SetPivot({ 0.0f, 0.5f });
 
-	m_stmnberRender.Init("Assets/sprite/HP2.dds", 512.0f, 32.0f);
-	//表示する座標を設定する。
-	m_stmnberRender.SetPosition({ -694.0f,350.0f ,0.0f });
-	m_HPRender.SetPivot({ 0.0f, 0.5f });
-
-	m_HPRender.Init("Assets/sprite/HP2.dds", 512.0f, 32.0f);
+	m_HPRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
 	//表示する座標を設定する。
 	m_HPRender.SetPosition({ -950.0f,450.0f ,0.0f });
 	m_HPRender.SetPivot({ 0.0f, 0.5f });
 
-	m_staminaRender.Init("Assets/sprite/HP2.dds", 512.0f, 32.0f);
+	m_stmnberRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
+	//表示する座標を設定する。
+	m_stmnberRender.SetPosition({ -694.0f,350.0f ,0.0f });
+	m_HPRender.SetPivot({ 0.0f, 0.5f });
+
+	m_staminaRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
 	//表示する座標を設定する。
 	m_staminaRender.SetPosition({ -950.0f,350.0f ,0.0f });
 	m_staminaRender.SetPivot({ 0.0f, 0.5f });
 
 	m_portionRender.Init("Assets/sprite/Portion.dds", 256, 256);
 	m_portionRender.SetPosition({ -850.0f, -300.0f, 0.0f });
+
+	m_statusRender.Init("Assets/sprite/status.dds", 553, 324);
+	m_statusRender.SetPosition({ -680.0f, 380.0f, 0.0f });
 
 	m_game = FindGO<Game>("game");
 
@@ -114,6 +117,21 @@ void Player::Update()
 		//モデルの更新。
 		m_modelRender.Update();
 
+
+		if (m_game->IsMove() == true)
+		{
+			m_HPberRender.SetPosition({ 331.0f,380.0f ,0.0f });
+			m_HPRender.SetPosition({ 75.0f,380.0f ,0.0f });
+			m_stmnberRender.SetPosition({ 331.0f,260.0f ,0.0f });
+			m_staminaRender.SetPosition({ 75.0f,260.0f ,0.0f });
+		}
+		else {
+			m_HPberRender.SetPosition({ -694.0f,450.0f ,0.0f });
+			m_HPRender.SetPosition({ -950.0f,450.0f ,0.0f });
+			m_stmnberRender.SetPosition({ -694.0f,350.0f ,0.0f });
+			m_staminaRender.SetPosition({ -950.0f,350.0f ,0.0f });
+		}
+
 	wchar_t wcsbuf[256];
 	swprintf_s(wcsbuf, 256, L"HP:%d", int(m_hp));
 	m_fontRender.SetText(wcsbuf);
@@ -122,7 +140,7 @@ void Player::Update()
 	//文字の大きさを変える。
 	//fontRender.SetScale(1.5f);
 	//表示する色を設定する。
-	m_fontRender.SetColor(g_vec4White);
+	m_fontRender.SetColor(g_vec4Black);
 	
 	wchar_t wcsbuf4[256];
 	swprintf_s(wcsbuf, 256, L"スタミナ:%d", int(m_sutamina/1.5));
@@ -132,7 +150,7 @@ void Player::Update()
 	//文字の大きさを変える。
 	//fontRender.SetScale(1.5f);
 	//表示する色を設定する。
-	m_staminaRender2.SetColor(g_vec4White);
+	m_staminaRender2.SetColor(g_vec4Black);
 
 	wchar_t wcsbuf2[256];
 	swprintf_s(wcsbuf2, 256, L"Level:%d", int(level));
@@ -142,7 +160,7 @@ void Player::Update()
 	//文字の大きさを変える。
 	//fontRender.SetScale(1.5f);
 	//表示する色を設定する。
-	m_fontRender2.SetColor(g_vec4White);
+	m_fontRender2.SetColor(g_vec4Black);
 
 	wchar_t wcsbuf3[256];
 	swprintf_s(wcsbuf3, 256, L"ポーション:%d", int(m_portion));
@@ -217,6 +235,7 @@ void Player::Update()
 	m_staminaRender.Update();
 
 	m_portionRender.Update();
+	m_statusRender.Update();
 
 	m_pointLight->SetPosition(m_position + Vector3(0.0f, 100.0f, 0.0f));
 
@@ -827,9 +846,9 @@ void Player::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 void Player::Render(RenderContext& rc)
 {
 
-	m_HPberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_HPberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 0.9f));
 	m_HPberRender.Draw(rc);
-	m_stmnberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_stmnberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 0.9f));
 	m_stmnberRender.Draw(rc);
 
 	//モデルを描画する。
@@ -839,11 +858,15 @@ void Player::Render(RenderContext& rc)
 	//m_staminaRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 	m_staminaRender.Draw(rc);
 
-
-	m_portionRender.Draw(rc);
-	//文字を描写する。
-	m_fontRender.Draw(rc);
-	m_fontRender2.Draw(rc);
-	m_fontRender3.Draw(rc);
-	m_staminaRender2.Draw(rc);
+	if (m_game->IsMove() == false)
+	{
+		m_statusRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.9f));
+		m_statusRender.Draw(rc);
+		m_portionRender.Draw(rc);
+		//文字を描写する。
+		m_fontRender.Draw(rc);
+		m_fontRender2.Draw(rc);
+		m_fontRender3.Draw(rc);
+		m_staminaRender2.Draw(rc);
+	}
 }

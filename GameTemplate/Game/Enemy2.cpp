@@ -70,7 +70,7 @@ bool Enemy2::Start()
 
 	m_player = FindGO<Player>("player");
 
-	m_spriteRender.Init("Assets/sprite/HP2.dds", 64.0f, 32.0f);
+	m_spriteRender.Init("Assets/sprite/HP.dds", 64.0f, 32.0f);
 	//•\¦‚·‚éÀ•W‚ğİ’è‚·‚éB
 	m_spriteRender.SetPosition({ 0.0f,1450.0f ,0.0f });
 
