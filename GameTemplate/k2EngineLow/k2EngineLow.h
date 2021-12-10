@@ -10,6 +10,7 @@ namespace nsK2EngineLow {
 	class GraphicsEngine;
 	class GameTime;
 	class Texture;
+	class Font;
 
 	class K2EngineLow {
 	public:
@@ -115,6 +116,24 @@ namespace nsK2EngineLow {
 			m_shaderBank.Regist(programName.c_str(), shader);
 		}
 		/// <summary>
+		/// バンクからテクスチャの生データを取得
+		/// </summary>
+		/// <param name="filePath">ファイルパス</param>
+		/// <returns></returns>
+		LowTexture* GetLowTextureFromBank(const char* filePath)
+		{
+			return m_lowTextureBank.Get(filePath);
+		}
+		/// <summary>
+		/// テクスチャの生データをバンクに登録。
+		/// </summary>
+		/// <param name="filePath">ファイルパス。</param>
+		/// <param name="texture">テクスチャ。</param>
+		void RegistLowTextureToBank(const char* filePath, LowTexture* textureLow)
+		{
+			m_lowTextureBank.Regist(filePath, textureLow);
+		}
+		/// <summary>
 		/// 現在のフレームレートに関する情報を取得
 		/// </summary>
 		/// <returns></returns>
@@ -145,10 +164,15 @@ namespace nsK2EngineLow {
 		}
 		
 	private:
+#ifdef K2_DEBUG
+		std::unique_ptr<Font> m_fpsFont;
+		std::unique_ptr<Font> m_fpsFontShadow;
+#endif
 		GraphicsEngine* m_graphicsEngine = nullptr;		// グラフィックエンジン。
 		TResourceBank<TkmFile> m_tkmFileBank;			// tkmファイルバンク。
 		TResourceBank<Shader> m_shaderBank;				// シェーダーバンク
 		TResourceBank<Texture>	m_textureBank;			// テクスチャバンク。
+		TResourceBank<LowTexture> m_lowTextureBank;		// テクスチャの生データバンク。
 		GamePad m_pad[GamePad::CONNECT_PAD_MAX];		// ゲームパッド。
 		GameTime m_gameTime;
 		FPSLimitter m_fpsLimitter;						// FPSに制限をかける処理。

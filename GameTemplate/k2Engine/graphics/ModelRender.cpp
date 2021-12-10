@@ -299,7 +299,7 @@ namespace nsK2Engine {
 			}
 		}
 	}
-
+	
 	void ModelRender::InitModelOnZprepass(
 		RenderingEngine& renderingEngine,
 		const char* tkmFilePath,

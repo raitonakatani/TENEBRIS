@@ -31,7 +31,7 @@ bool Magic::Start()
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/efk/Magic.efk");
 
 	//エフェクトを読み込む。
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/efk/enemy.efk");
+	//EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/efk/enemy.efk");
 
 	//エフェクトのオブジェクトを作成する。
 	m_effectEmitter = NewGO <EffectEmitter>(0);

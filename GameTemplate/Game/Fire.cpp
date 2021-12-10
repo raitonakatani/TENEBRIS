@@ -32,7 +32,7 @@ bool Fire::Start()
 	m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
 
 	// 番号を指定して、efkファイルを読み込む。
-	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/efk/fire.efk");
+	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/efk/Fire.efk");
 
 	m_pointLight = g_sceneLight->NewPointLight();
 
@@ -56,12 +56,15 @@ void Fire::Update()
 
 	if (model == true)
 	{
-		if (m_effectEmitter == nullptr)
+		//if (m_effectEmitter == nullptr){}	
+		m_timer += g_gameTime->GetFrameDeltaTime();
+		if (m_timer >= 0.7f)
 		{
 			CreateFireEffect();
+			m_timer = 0.0f;
 		}
 	}
-	else
+	else if(model != true)
 	{
 		if (m_effectEmitter != nullptr)
 		{
@@ -150,18 +153,18 @@ void Fire::Update()
 
 void Fire::CreateFireEffect()
 {
-	//エフェクトのオブジェクトを作成する。
-	m_effectEmitter = NewGO <EffectEmitter>(0);
-	m_effectEmitter->Init(4);
-	//エフェクトの大きさを設定する。
-	m_effectEmitter->SetScale(Vector3(10.0f, 8.0f, 10.0f));
-	Vector3 effectposition = m_position;
-	effectposition.y += 125.0f;
-	m_effectEmitter->SetPosition(effectposition);
-	Quaternion rotation;
-	rotation = m_rotation;
-	m_effectEmitter->SetRotation(rotation);
-	m_effectEmitter->Play();
+		//エフェクトのオブジェクトを作成する。
+		m_effectEmitter = NewGO <EffectEmitter>(0);
+		m_effectEmitter->Init(4);
+		//エフェクトの大きさを設定する。
+		m_effectEmitter->SetScale(Vector3(12.0f, 8.0f, 12.0f));
+		Vector3 effectposition = m_position;
+		effectposition.y += 125.0f;
+		m_effectEmitter->SetPosition(effectposition);
+		Quaternion rotation;
+		rotation = m_rotation;
+		m_effectEmitter->SetRotation(rotation);
+		m_effectEmitter->Play();
 }
 
 void Fire::Render(RenderContext& rc)

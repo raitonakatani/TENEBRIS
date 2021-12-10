@@ -31,6 +31,7 @@ namespace nsK2Engine {
 		if (m_mapChipDataNum == 1)
 		{
 			m_modelRender.Init(*m_filePath.get());
+			//m_modelRender.SetShadowCasterFlag(false);
 			auto& mapChipData = m_mapChipDataVector[0];
 			m_modelRender.SetTRS(mapChipData.position, mapChipData.rotation, mapChipData.scale);
 			m_modelRender.Update();
@@ -43,7 +44,7 @@ namespace nsK2Engine {
 
 		//インスタンシング描画用にモデルを初期化。
 		m_modelRender.Init(*m_filePath.get(), nullptr, 0, enModelUpAxisZ, true, m_mapChipDataNum);
-
+		//m_modelRender.SetShadowCasterFlag(false);
 		for (auto& mapChipData : m_mapChipDataVector)
 		{
 			//ワールド行列を計算する。

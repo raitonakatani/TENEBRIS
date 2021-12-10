@@ -293,10 +293,10 @@ namespace nsK2Engine {
 
         // ディファードライティング
         DeferredLighting(rc);
-
+       
         // ディファードライティングが終わった時点でスナップショットを撮影する
         SnapshotMainRenderTarget(rc, EnMainRTSnapshot::enDrawnOpacity);
-
+        
         // フォワードレンダリング
         ForwardRendering(rc);
 

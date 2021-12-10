@@ -32,11 +32,19 @@ bool CAMERA::Start()
 	m_springCamera.SetNear(1.0f);
 	m_springCamera.SetFar(40000.0f);
 
+	warpCounter = FindGO<WarpCounter>("WarpCounter");
+
+
+//	if (warpCounter->warpCounter == 0)
+//	{
+		//注視点から視点までのベクトルを設定。
+		m_toCameraPos.Set(0.0f, 200.0f, -200.0f);
+//	}
+	
 	return true;
 }
 void CAMERA::Update()
 {
-	warpCounter = FindGO<WarpCounter>("WarpCounter");
 
 	if (warpCounter->warpCounter == 0)
 	{

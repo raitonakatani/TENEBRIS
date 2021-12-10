@@ -179,7 +179,6 @@ namespace nsK2EngineLow {
 				PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 
 				if (callback.isHit) {
-					m_isKABE = true;
 					//当たった。
 					//壁。
 					Vector3 vT0, vT1;
@@ -215,7 +214,6 @@ namespace nsK2EngineLow {
 					}
 				}
 				else {
-					m_isKABE = false;
 					//どことも当たらないので終わり。
 					break;
 				}

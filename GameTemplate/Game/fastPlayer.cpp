@@ -142,7 +142,11 @@ void fastPlayer::Move()
 	cameraRight.Normalize();
 	//XZ成分の移動速度をクリア。
 
-
+/*	if (g_pad[0]->IsTrigger(enButtonA))
+	{
+		m_moveSpeed.y += 1000.0f;
+	}
+*/
 	if (COOLtime == false)
 	{
 		if (g_pad[0]->IsPress(enButtonLB1) && m_sutamina > 0)

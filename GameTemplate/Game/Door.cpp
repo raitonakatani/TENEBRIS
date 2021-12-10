@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Door.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "Kisi.h"
 #include "Enemy2.h"
 #include "Enemy3.h"
 #include "Enemy4.h"
@@ -168,7 +168,7 @@ void Door::ProcessOpenStateTransition()
 		//オープン終わりステートに遷移する。
 		m_doorState = enDoorState_Open_Idle;
 
-		auto enemys = FindGOs<Enemy>("enemy");
+		auto enemys = FindGOs<Kisi>("enemy");
 		for (auto enemy : enemys)
 		{
 			for (int i = 0;i < 3;i++) {

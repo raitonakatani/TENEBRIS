@@ -114,6 +114,8 @@ public:
 		return m_sutamina;
 	}
 
+
+
 	/// <summary>
 	/// ポーションをプラスする。
 	/// </summary>

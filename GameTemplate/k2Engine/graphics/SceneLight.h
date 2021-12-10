@@ -9,8 +9,6 @@ namespace nsK2Engine {
         Vector4 color;      // ライトのカラー
     };
 
-    // ポイントライト。
-
     /// <summary>
     /// ポイントライト構造体
     /// </summary>
@@ -35,6 +33,9 @@ namespace nsK2Engine {
         Vector3 attn;           // 減衰パラメータ。xに影響範囲、yには影響率に累乗するパラメータ。
         float pad3;
     public:
+        
+    //    Vector3 POSITION;
+    //    Vector4 COLOR;
 
         /// <summary>
         /// 座標を設定。
@@ -171,7 +172,13 @@ namespace nsK2Engine {
             m_light.directionalLight[lightNo].direction = direction;
             m_light.directionalLight[lightNo].color = color;
         }
-        /// <summary>
+
+  /*      void SetPointLight(int lightNo, Vector3 point, Vector3 color)
+        {
+            m_light.pointLights[lightNo].POSITION = point;
+            m_light.pointLights[lightNo].COLOR = color;
+        }
+   */     /// <summary>
         /// 影をキャストする？
         /// </summary>
         /// <param name="ligNo"></param>

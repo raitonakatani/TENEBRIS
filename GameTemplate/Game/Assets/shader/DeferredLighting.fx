@@ -97,6 +97,10 @@ float4 PSMainCore(PSInput In, uniform int isSoftShadow)
     //スムース
     float smooth = metallicShadowSmoothTexture.SampleLevel(Sampler, In.uv, 0).a;
 
+ /*   if (smooth > 0.98f) {
+        smooth = 0.6f;
+    }
+*/
     //影生成用のパラメータ。
     float shadowParam = metallicShadowSmoothTexture.Sample(Sampler, In.uv).g;
     

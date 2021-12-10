@@ -3,22 +3,27 @@
 
 #include "Player.h"
 #include"fastPlayer.h"
-#include "Enemy.h"
+
+#include "Kisi.h"
 #include "Enemy2.h"
 #include "Enemy3.h"
 #include "Enemy4.h"
+
 #include "Door.h"
 #include "Menu.h"
 #include "warp.h"
+
 #include "BackGround.h"
 #include "BackGround2.h"
+
 #include "GameCamera.h"
 #include "CAMERA.h"
+
 #include "TIMER.h"
 #include "Fade.h"
+#include "Title.h"
 #include "GameClear.h"
 #include"Portion.h"
-#include "Title.h"
 #include "Fire.h"
 #include "sound/SoundEngine.h"
 #include "sound/SoundSource.h"
@@ -35,19 +40,11 @@ Game::Game()
 
 Game::~Game()
 {
-	DeleteGO(m_player);
-	DeleteGO(m_fastplayer);
-	DeleteGO(m_skycube);
-	DeleteGO(m_camera);
-	DeleteGO(m_background);
-	DeleteGO(m_TIMER);
-	DeleteGO(GameBGM);
-
 	for (auto door : m_doorVector)
 	{
 		DeleteGO(door);
 	}
-	const auto& enemys = FindGOs<Enemy>("enemy");
+	const auto& enemys = FindGOs<Kisi>("enemy");
 	for (auto enemy : enemys)
 	{
 		DeleteGO(enemy);
@@ -68,6 +65,21 @@ Game::~Game()
 	{
 		DeleteGO(portion);
 	}
+
+	const auto& fires = FindGOs<Fire>("fire");
+	for (auto m_fire : fires)
+	{
+		DeleteGO(m_fire);
+	}
+
+	DeleteGO(m_camera);
+	DeleteGO(m_player);
+	DeleteGO(m_fastplayer);
+	DeleteGO(m_skycube);
+	DeleteGO(m_background);
+	DeleteGO(m_TIMER);
+	DeleteGO(GameBGM);
+
 
 }
 
@@ -98,7 +110,7 @@ bool Game::Start()
 	//	m_fire->SetPosition({ 250.0f,500.0f,-14500.0f });
 		//m_fire->SetScale({ 2.5f,2.5f,2.5f });
 
-		if (clearCounter->clearCounter == 0)
+		if (clearCounter->clearCounter == 0|| clearCounter->clearCounter == 1)
 		{
 			//レベルを構築する。
 			m_levelRender.Init("Assets/level/stage.tkl", [&](LevelObjectData& objData) {
@@ -113,7 +125,7 @@ bool Game::Start()
 				}
 				else if (objData.ForwardMatchName(L"enemy") == true) {
 					//エネミー（騎士）のインスタンスを生成する。
-					Enemy* kisi = NewGO<Enemy>(0, "enemy");
+					Kisi* kisi = NewGO<Kisi>(0, "enemy");
 					kisi->SetPosition(objData.position);
 					kisi->SetRotation(objData.rotation);
 					kisi->SetScale(objData.scale);
@@ -169,7 +181,7 @@ bool Game::Start()
 				}
 				if (objData.EqualObjectName(L"Fire") == true) {
 
-					m_fire = NewGO<Fire>(0, "Fire");
+					m_fire = NewGO<Fire>(0, "fire");
 					m_fire->SetPosition(objData.position);
 					m_fire->SetRotation(objData.rotation);
 					m_fire->SetScale(objData.scale);
@@ -181,7 +193,7 @@ bool Game::Start()
 				});
 		}
 
-		if (clearCounter->clearCounter == 1)
+/*		if (clearCounter->clearCounter == 1)
 		{
 			//レベルを構築する。
 			m_levelRender.Init("Assets/level/stage2.tkl", [&](LevelObjectData& objData) {
@@ -196,7 +208,7 @@ bool Game::Start()
 				}
 				else if (objData.ForwardMatchName(L"enemy") == true) {
 					//エネミー（騎士）のインスタンスを生成する。
-					Enemy* kisi = NewGO<Enemy>(0, "enemy");
+					Kisi* kisi = NewGO<Kisi>(0, "enemy");
 					kisi->SetPosition(objData.position);
 					kisi->SetRotation(objData.rotation);
 					kisi->SetScale(objData.scale);
@@ -254,7 +266,7 @@ bool Game::Start()
 				});
 		}
 
-
+*/
 
 	//m_skycube = NewGO<SkyCube>(0, "skycube");
 
@@ -265,7 +277,6 @@ bool Game::Start()
 
 	g_camera3D->SetPosition({ 0.0f, 100.0f, -600.0f });
 	m_camera = NewGO<CAMERA>(0, "m_camera");
-	m_camera->SetPosition({ 0.0f, 200.0f, -200.0f });
 
 
 

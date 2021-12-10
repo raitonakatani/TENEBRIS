@@ -67,12 +67,6 @@ namespace nsK2EngineLow {
 		{
 			return m_isOnGround;
 		}
-
-		bool IsOnKABE() const
-		{
-			return m_isKABE;
-		}
-
 		/*!
 		* @brief	コライダーを取得。
 		*/
@@ -96,7 +90,6 @@ namespace nsK2EngineLow {
 		Vector3 			m_position;						//!<座標。
 		bool 				m_isJump = false;				//!<ジャンプ中？
 		bool				m_isOnGround = true;			//!<地面の上にいる？
-		bool				m_isKABE = true;				//!壁に当たっているか？
 		CCapsuleCollider	m_collider;						//!<コライダー。
 		float				m_radius = 0.0f;				//!<カプセルコライダーの半径。
 		float				m_height = 0.0f;				//!<カプセルコライダーの高さ。

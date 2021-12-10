@@ -14,9 +14,9 @@ namespace nsK2Engine {
     void SceneLight::Init()
     {
         // ‘¾—zŒõ
-        m_light.directionalLight[0].color.x = 1.2f;
-        m_light.directionalLight[0].color.y = 1.2f;
-        m_light.directionalLight[0].color.z = 1.2f;
+        m_light.directionalLight[0].color.x = 2.5f;
+        m_light.directionalLight[0].color.y = 2.5f;
+        m_light.directionalLight[0].color.z = 2.5f;
 
 
 
@@ -26,7 +26,21 @@ namespace nsK2Engine {
         m_light.directionalLight[0].direction.Normalize();
         m_light.directionalLight[0].castShadow = true;
 
-        //
+
+//        PointLight pointlight;
+
+//        m_light.pointLights[0].SetPosition({ 1.0f,1.0f,1.0f });
+
+/*        m_light.pointLights[0].COLOR.x = 1.0f;
+        m_light.pointLights[0].COLOR.y = 1.0f;
+        m_light.pointLights[0].COLOR.z = 1.0f;
+
+
+        m_light.pointLights[0].POSITION.x = 1.0f;
+        m_light.pointLights[0].POSITION.y = 1.0f;
+        m_light.pointLights[0].POSITION.z = 1.0f;
+        m_light.pointLights[0].POSITION.Normalize();
+*/        //
       /*  m_light.directionalLight[1].color.x = 1.0f;
         m_light.directionalLight[1].color.y = 1.0f;
         m_light.directionalLight[1].color.z = 1.0f;

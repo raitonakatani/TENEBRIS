@@ -51,6 +51,7 @@ private:
 	Vector3			m_scale;
 	PointLight* m_pointLight = nullptr;
 	WarpCounter* warpCounter = nullptr;
+	float m_timer = 0.0f;
 	bool model = true;
 };
 

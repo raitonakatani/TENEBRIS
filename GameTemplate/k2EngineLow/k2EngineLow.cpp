@@ -43,6 +43,7 @@ namespace nsK2EngineLow {
 		m_fpsLimitter.BeginFrame();
 		m_gameTime.BeginMeasurement();
 		m_graphicsEngine->BeginRender();
+		EffectEngine::GetInstance()->BeginFrame();
 		for (auto& pad : m_pad) {
 			pad.BeginFrame();
 		}

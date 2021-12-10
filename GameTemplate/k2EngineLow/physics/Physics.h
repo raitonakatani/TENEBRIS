@@ -94,17 +94,33 @@ namespace nsK2EngineLow {
 		{
 			m_dynamicWorld->removeRigidBody(rb.GetBody());
 		}
+		
 		void ConvexSweepTest(
 			const btConvexShape* castShape,
 			const btTransform& convexFromWorld,
 			const btTransform& convexToWorld,
 			btCollisionWorld::ConvexResultCallback& resultCallback,
 			btScalar allowedCcdPenetration = 0.0f
-		)
+		) const
 		{
 			m_dynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
 		}
-
+		/// <summary>
+		/// 物理ワールドに対して、凸型コライダーSweepテストを行う。
+		/// </summary>
+		/// <param name="collider">コライダー</param>
+		/// <param name="convexStart">コライダーの開始座標</param>
+		/// <param name="rayEnd">コライダーの終了座標</param>
+		/// <returns>trueがかえってきたら当たっている。</returns>
+		bool ConvexSweepTest(ICollider& collider, const Vector3& rayStart, const Vector3& rayEnd) const;
+		/// <summary>
+		/// レイテストを実施。
+		/// </summary>
+		/// <param name="rayStart">レイの始点</param>
+		/// <param name="rayEnd">レイの終点</param>
+		/// <param name="hitPos">交点の格納先</param>
+		/// <returns>trueが返ってきたら衝突している。</returns>
+		bool RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const;
 		/*!
 		* @brief	コリジョンオブジェクトをワールドに登録。
 		*@param[in]	colliObj	コリジョンオブジェクト。

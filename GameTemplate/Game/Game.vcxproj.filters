@@ -15,7 +15,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="GameCamera.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="TIMER.cpp" />
     <ClCompile Include="Enemy2.cpp" />
     <ClCompile Include="Magic.cpp" />
@@ -34,6 +33,7 @@
     <ClCompile Include="BackGround2.cpp" />
     <ClCompile Include="WarpCounter.cpp" />
     <ClCompile Include="Fire.cpp" />
+    <ClCompile Include="Kisi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -44,7 +44,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="GameCamera.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="TIMER.h" />
     <ClInclude Include="Enemy2.h" />
     <ClInclude Include="Magic.h" />
@@ -63,5 +62,6 @@
     <ClInclude Include="BackGround2.h" />
     <ClInclude Include="WarpCounter.h" />
     <ClInclude Include="Fire.h" />
+    <ClInclude Include="Kisi.h" />
   </ItemGroup>
 </Project>
