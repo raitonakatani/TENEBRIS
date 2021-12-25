@@ -3,7 +3,6 @@
 class fastPlayer;
 class WarpCounter;
 //class Player;
-
 class warp : public IGameObject
 {
 public:
@@ -25,18 +24,29 @@ public:
 	{
 		m_position = position;
 	}
+	/// <summary>
+	/// 座標を取得。
+	/// </summary>
+	/// <returns>座標。</returns>
+	const Vector3& GetPosition() const
+	{
+		return m_position;
+	}
 
 private:
 	//ここからメンバ変数。
-	ModelRender m_modelRender;            //モデルレンダー。
-	Vector3 m_position;                  //座標。
-	Vector3 m_firstPosition;             //最初の座標。
-	int moveState = 0;                   //上に移動か下に移動か。
-	Quaternion rotation;                //クォータニオン。
-	fastPlayer* m_fastplayer;                   //プレイヤー。
-	WarpCounter* warpCounter = nullptr;
+
+
+	ModelRender				m_modelRender;			//モデルレンダー。
+	Vector3					m_position;				//座標。
+	Vector3					m_firstPosition;		//最初の座標。
+	int						moveState = 0;			//上に移動か下に移動か。
+	Quaternion				m_rotation;				//クォータニオン。
+	fastPlayer*				m_fastplayer;			//プレイヤー。
+	WarpCounter*			warpCounter = nullptr;
+	//bool mozi = false;
 	//Player* m_player;
-	SoundSource* se;                    //se
+	//SoundSource* se;                    //se
 };
 
 

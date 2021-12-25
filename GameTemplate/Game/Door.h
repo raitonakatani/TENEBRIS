@@ -5,6 +5,7 @@
 /// </summary>
 
 class Player;
+class Game;
 
 class Door : public IGameObject
 {
@@ -32,12 +33,20 @@ public:
 	/// </summary>
 	void NotifyClose();
 	/// <summary>
-	/// 座標を設定する。
+	/// 座標を設定。
 	/// </summary>
 	/// <param name="position">座標。</param>
 	void SetPosition(const Vector3& position)
 	{
 		m_position = position;
+	}
+	/// <summary>
+	/// 座標を取得。
+	/// </summary>
+	/// <returns>座標。</returns>
+	const Vector3& GetPosition() const
+	{
+		return m_position;
 	}
 	/// <summary>
 	/// 回転を設定する。
@@ -71,6 +80,11 @@ public:
 	{
 		return m_doorNumber;
 	}
+
+	bool IsRange() const
+	{
+		return  m_range;
+	}
 private:
 	/// <summary>
 	/// アニメーションを再生する。
@@ -102,6 +116,7 @@ private:
 	Quaternion					m_rotation;								//回転。
 	Vector3						m_scale = Vector3::One;					//大きさ。
 	FontRender					m_fontRender;							//カギを所持しているとき。
+	SpriteRender m_telopRender;
 	enum EnAnimationClip {												//アニメーション。
 		enAnimationClip_Idle,											//待機。	
 		enAnimationClip_Open,											//オープン。
@@ -112,8 +127,15 @@ private:
 	PhysicsStaticObject			m_physicsStaticObject;					//フィジクススタティックオブジェクト。	
 	EnDoorState					m_doorState = enDoorState_Idle;			//ドアステート。
 	Player*						m_player;								//プレイヤー。
+	Game*						m_game;
 	bool						door = false;							//ドアとの距離。
 	int							m_doorNumber = 0;						//ドアの番号。
 	bool model = false;
+
+
+
+	bool m_range = false;
+
+	int m_DoorCount = 0;
 };
 

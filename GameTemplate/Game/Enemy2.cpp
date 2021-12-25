@@ -84,102 +84,98 @@ bool Enemy2::Start()
 
 void Enemy2::Update()
 {
-	//追跡処理。
-	Chase();
-	//回転処理。
-	Rotation();
-	//当たり判定。
-	Collision();
-	//アニメーションの再生。
-	PlayAnimation();
-	//ステートの遷移処理。
-	ManageState();
-
-
-	modeltimer += g_gameTime->GetFrameDeltaTime();
-
-	if (m_model == 1)
+	//|| m_hp <= 0
+	if (m_player->GetPlayerHP() != 0)
 	{
-		if (model == false) {
-			//エフェクトのオブジェクトを作成する。
-			m_effectEmitter = NewGO <EffectEmitter>(0);
-			m_effectEmitter->Init(1);
-			m_effectEmitter->SetPosition(m_position);
-			//エフェクトの大きさを設定する。
-			m_effectEmitter->SetScale(m_scale * 15.0f);
-			m_effectEmitter->Play();
-			modeltimer = 0.0f;
+		//追跡処理。
+		Chase();
+		//回転処理。
+		Rotation();
+		//当たり判定。
+		Collision();
+		//アニメーションの再生。
+		PlayAnimation();
+		//ステートの遷移処理。
+		ManageState();
 
+	}
+		modeltimer += g_gameTime->GetFrameDeltaTime();
+
+		if (m_model == 1)
+		{
+			if (model == false) {
+				//エフェクトのオブジェクトを作成する。
+				m_effectEmitter = NewGO <EffectEmitter>(0);
+				m_effectEmitter->Init(1);
+				m_effectEmitter->SetPosition(m_position);
+				//エフェクトの大きさを設定する。
+				m_effectEmitter->SetScale(m_scale * 15.0f);
+				m_effectEmitter->Play();
+				modeltimer = 0.0f;
+
+			}
+			model = true;
 		}
-		model = true;
-	}
-	else {
-		model = false;
-	}
+		else {
+			model = false;
+		}
 
 
-	if (m_hp <= 0)
-	{
-		m_hp = 0;
-	}
+		if (m_hp <= 0)
+		{
+			m_hp = 0;
+		}
 
-	//HPバー
-	a = m_hp / 2;
-	m_spriteRender.SetScale({ a, 0.5f, 0.0f });
+		//HPバー
+		a = m_hp / 2;
+		m_spriteRender.SetScale({ a, 0.5f, 0.0f });
 
-	Vector3 diff = m_player->GetPosition() - m_position;
+		Vector3 diff = m_player->GetPosition() - m_position;
 
-	//ベクトルの長さが1000.0fより小さかったら。
-	if (diff.Length() <= 1000.0f)
-	{
-		//ワールド座標に変換。
-		//座標をエネミーの少し上に設定する。
-		Vector4 worldPos = Vector4(m_position.x, m_position.y + 250.0f, m_position.z, 1.0f);
+		//ベクトルの長さが1000.0fより小さかったら。
+		if (diff.Length() <= 1000.0f)
+		{
+			//ワールド座標に変換。
+			//座標をエネミーの少し上に設定する。
+			Vector4 worldPos = Vector4(m_position.x, m_position.y + 250.0f, m_position.z, 1.0f);
 
-		Matrix matrix;
-		matrix.Multiply(g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix());
+			Matrix matrix;
+			matrix.Multiply(g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix());
 
-		matrix.Apply(worldPos);
+			matrix.Apply(worldPos);
 
-		//カメラのビュー行列を掛ける。
-		//カメラ座標に変換。
-		worldPos.x = (worldPos.x / worldPos.w);
-		worldPos.y = (worldPos.y / worldPos.w);
+			//カメラのビュー行列を掛ける。
+			//カメラ座標に変換。
+			worldPos.x = (worldPos.x / worldPos.w);
+			worldPos.y = (worldPos.y / worldPos.w);
 
-		//カメラのプロジェクション行列を掛ける。
-		//スクリーン座標に変換。
-		worldPos.x *= FRAME_BUFFER_W / 2;
-		worldPos.y *= FRAME_BUFFER_H / 2;
+			//カメラのプロジェクション行列を掛ける。
+			//スクリーン座標に変換。
+			worldPos.x *= FRAME_BUFFER_W / 2;
+			worldPos.y *= FRAME_BUFFER_H / 2;
 
-		//ポジションの設定。
-		m_spriteRender.SetPosition(Vector3(worldPos.x, worldPos.y, 0.0f));
-		//HPバーを表示する。
-		m_isShowHPBar = true;
-	}
-	else
-	{
-		//HPバーを表示しない。
-		m_isShowHPBar = false;
-	}
-	m_spriteRender.Update();
+			//ポジションの設定。
+			m_spriteRender.SetPosition(Vector3(worldPos.x, worldPos.y, 0.0f));
+			//HPバーを表示する。
+			m_isShowHPBar = true;
+		}
+		else
+		{
+			//HPバーを表示しない。
+			m_isShowHPBar = false;
+		}
+		m_spriteRender.Update();
 
-	//火力。
-	if (m_player->level == 2)
-	{
-		karyoku = 2;
-	}
-	if (m_player->level == 3)
-	{
-		karyoku = 3;
-	}
-	if (m_player->level == 4)
-	{
-		karyoku = 4;
-	}
-	if (m_player->level == 5)
-	{
-		karyoku = 5;
-	}
+		//火力。
+		if (m_player->level == 2)
+		{
+			karyoku = 2;
+		}
+		if (m_player->level == 3)
+		{
+			karyoku = 3;
+		}
+	
 
 	//モデルの更新。
 	m_modelRender.Update();
@@ -316,17 +312,19 @@ const bool Enemy2::SearchPlayer() const
 
 void Enemy2::MakeFireBall()
 {
-	//ファイヤーボールを作成する。
-	Magic* fireBall = NewGO<Magic>(0);
-	Vector3 fireBallPosition = m_position;
-	//座標を少し上にする。
-	fireBallPosition.y += 70.0f;
-	//座標を設定する。
-	fireBall->SetPosition(fireBallPosition);
-	fireBall->SetRotation(m_rotation);
-	//術者はプレイヤーにする。
-	fireBall->SetEnMagician(Magic::enMagician_Enemy2);
-
+	if (m_hp >= 1)
+	{
+		//ファイヤーボールを作成する。
+		Magic* fireBall = NewGO<Magic>(0);
+		Vector3 fireBallPosition = m_position;
+		//座標を少し上にする。
+		fireBallPosition.y += 70.0f;
+		//座標を設定する。
+		fireBall->SetPosition(fireBallPosition);
+		fireBall->SetRotation(m_rotation);
+		//術者はプレイヤーにする。
+		fireBall->SetEnMagician(Magic::enMagician_Enemy2);
+	}
 }
 
 void Enemy2::ProcessCommonStateTransition()
@@ -345,72 +343,78 @@ void Enemy2::ProcessCommonStateTransition()
 	//回転を設定する。
 //	m_modelRender.SetRotation(m_rotation);
 
-	//プレイヤーを見つけたら。
-	if (SearchPlayer() == true)
+	if (m_hp >= 1)
 	{
-		//ベクトルを正規化する。
-		diff.Normalize();
-		//移動速度を設定する。
-		m_moveSpeed -= diff * 100.0f;
-
-
-		//攻撃できる距離なら。
-		if (IsCanAttack() == true)
+		//プレイヤーを見つけたら。
+		if (SearchPlayer() == true)
 		{
-			//乱数によって、攻撃するか待機させるかを決定する。	
-			int ram = rand() % 100;
-			if (ram > 50)
-			{
-				//攻撃ステートに遷移する。
-				m_enemy2State = enEnemy2State_MagicAttack;
-				m_isUnderAttack = false;
-				return;
-			}
-			else
-			{
-				//追跡ステートに遷移する。
-				m_enemy2State = enEnemy2State_Chase;
-				return;
-			}
+			//ベクトルを正規化する。
+			diff.Normalize();
+			//移動速度を設定する。
+			m_moveSpeed -= diff * 100.0f;
 
-		}
-		//攻撃できない距離なら。
-		else
-		{
-			//乱数によって、追跡させるか魔法攻撃をするか決定する。	
-			int ram = rand() % 100;
-			if (ram > 30)
+
+			//攻撃できる距離なら。
+			if (IsCanAttack() == true)
 			{
-				//追跡ステートに遷移する。
-				m_enemy2State = enEnemy2State_Chase;
-				return;
-			}
-			else {
-				//現在が魔法攻撃ステートなら。
-				if (m_enemy2State == enEnemy2State_MagicAttack)
+				//乱数によって、攻撃するか待機させるかを決定する。	
+				int ram = rand() % 100;
+				if (ram > 50)
 				{
-					//連続で魔法を撃たせないように。
+					//攻撃ステートに遷移する。
+					m_enemy2State = enEnemy2State_MagicAttack;
+					m_isUnderAttack = false;
+					return;
+				}
+				else
+				{
 					//追跡ステートに遷移する。
 					m_enemy2State = enEnemy2State_Chase;
 					return;
 				}
-				//現在が魔法攻撃ステートでないなら。
-				else
+
+			}
+			//攻撃できない距離なら。
+			else
+			{
+				//乱数によって、追跡させるか魔法攻撃をするか決定する。	
+				int ram = rand() % 100;
+				if (ram > 30)
 				{
-					//魔法攻撃ステートに遷移する。
-					m_enemy2State = enEnemy2State_MagicAttack;
+					//追跡ステートに遷移する。
+					m_enemy2State = enEnemy2State_Chase;
 					return;
+				}
+				else {
+					//現在が魔法攻撃ステートなら。
+					if (m_enemy2State == enEnemy2State_MagicAttack)
+					{
+						//連続で魔法を撃たせないように。
+						//追跡ステートに遷移する。
+						m_enemy2State = enEnemy2State_Chase;
+						return;
+					}
+					//現在が魔法攻撃ステートでないなら。
+					else
+					{
+						//魔法攻撃ステートに遷移する。
+						m_enemy2State = enEnemy2State_MagicAttack;
+						return;
+					}
 				}
 			}
 		}
-	}
-	//プレイヤーを見つけられなければ。
-	else
-	{
-		//待機ステートに遷移する。
-		m_enemy2State = enEnemy2State_Idle;
-		return;
+		//プレイヤーを見つけられなければ。
+		else
+		{
+			//待機ステートに遷移する。
+			m_enemy2State = enEnemy2State_Idle;
+			return;
 
+		}
+	}
+	else {
+		return;
 	}
 }
 
@@ -564,7 +568,7 @@ void Enemy2::PlayAnimation()
 		break;
 		//魔法攻撃ステートの時。
 	case enEnemy2State_MagicAttack:
-		m_modelRender.SetAnimationSpeed(1.5f);
+		m_modelRender.SetAnimationSpeed(1.4f);
 		//魔法攻撃アニメーションを再生。
 		m_modelRender.PlayAnimation(enAnimationClip_MagicAttack, 0.1f);
 		break;
@@ -623,12 +627,14 @@ void Enemy2::Render(RenderContext& rc)
 	else {
 		return;
 	}
-
-	//画像を描画する。
-	if (m_isShowHPBar == true) {
-		m_spriteRender.Draw(rc);
-	}
-	else {
-		return;
+	if (m_player->GetPlayerHP() != 0)
+	{
+		//画像を描画する。
+		if (m_isShowHPBar == true) {
+			m_spriteRender.Draw(rc);
+		}
+		else {
+			return;
+		}
 	}
 }

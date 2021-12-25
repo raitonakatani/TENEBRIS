@@ -184,7 +184,7 @@ private:
 	Game* m_game = nullptr;
 	SpriteRender				m_spriteRender;								//画像。
 	bool						m_isUnderAttack = false;					//攻撃中か？
-	float							m_hp = 1;									//HP。
+	float							m_hp = 5;									//HP。
 	int						  m_swordBoneId = -1;                 //剣のボーンのID。
 	Player* m_player = nullptr;							//プレイヤー。
 	float						m_chaseTimer = 0.0f;						//追跡タイマー。

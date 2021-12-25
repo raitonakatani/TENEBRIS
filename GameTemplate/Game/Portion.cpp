@@ -39,6 +39,7 @@ void Portion::Update()
 	//絵描きさんに座標を教える。
 	m_modelRender.SetPosition(m_position);
 
+
 	//プレイヤーから☆に向かうベクトルを計算。
 	Vector3 diff = m_player->GetPosition() - m_position;
 	//ベクトルの長さが120.0fより小さかったら。
@@ -52,7 +53,7 @@ void Portion::Update()
 		SoundSource* Getse = NewGO<SoundSource>(0);
 		Getse->Init(4);
 		Getse->Play(false);
-		Getse->SetVolume(1.5f);
+		Getse->SetVolume(0.8f);
 
 		//自信を削除する。
 		DeleteGO(this);

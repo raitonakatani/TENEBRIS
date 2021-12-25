@@ -2,6 +2,7 @@
 
 //クラス宣言。
 class Player;
+class Game;
 
 /// <summary>
 /// エネミー。
@@ -187,8 +188,9 @@ private:
 	SpriteRender				m_spriteRender;								//画像。
 	bool						m_isUnderAttack = false;					//攻撃中か？
 	int							m_swordBoneId = -1;							//剣のボーンのID。
-	float							m_hp = 1;									//HP。
+	float							m_hp = 20;									//HP。
 	Player* m_player = nullptr;												//プレイヤー。
+	Game* m_game = nullptr;
 	float						m_chaseTimer = 0.0f;						//追跡タイマー。
 	float						m_idleTimer = 0.0f;							//待機タイマー。
 	float						a = 0.0f;			//拡大率

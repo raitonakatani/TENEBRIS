@@ -38,108 +38,145 @@ bool CAMERA::Start()
 //	if (warpCounter->warpCounter == 0)
 //	{
 		//注視点から視点までのベクトルを設定。
-		m_toCameraPos.Set(0.0f, 200.0f, -200.0f);
+		m_toCameraPos.Set(0.1f, 200.0f, -200.0f);
 //	}
 	
+
+		target = m_player->GetPosition();
+		//プレイヤの足元からちょっと上を注視点とする。
+		target.y += 150.0f;
+		target += g_camera3D->GetForward() * 20.0f;
+		pos = target + m_toCameraPos;
+		
+		//= target + m_toCameraPos;
+
 	return true;
 }
 void CAMERA::Update()
 {
 
-	if (warpCounter->warpCounter == 0)
+	if (m_player->GetPlayerHP() <= 0)
 	{
-		//カメラを更新。
-		//注視点を計算する。
-		Vector3 target = m_fastplayer->GetPosition();
-		//プレイヤの足元からちょっと上を注視点とする。
-		target.y += 150.0f;
-		target += g_camera3D->GetForward() * 20.0f;
+		//YZIKU++;
+		//ZZIKU--;
+		//m_toCameraPos.Set(0.0f, YZIKU, ZZIKU);
 
-		Vector3 toCameraPosOld = m_toCameraPos;
-		//パッドの入力を使ってカメラを回す。
-		float x = g_pad[0]->GetRStickXF();
-		float y = g_pad[0]->GetRStickYF();
-		//Y軸周りの回転
-		Quaternion qRot;
-		qRot.SetRotationDeg(Vector3::AxisY, 2.3f * x);
-		qRot.Apply(m_toCameraPos);
-		//X軸周りの回転。
-		Vector3 axisX;
-		axisX.Cross(Vector3::AxisY, m_toCameraPos);
-		axisX.Normalize();
-		qRot.SetRotationDeg(axisX, 2.3f * y);
-		qRot.Apply(m_toCameraPos);
-		//カメラの回転の上限をチェックする。
-		//注視点から視点までのベクトルを正規化する。
-		//正規化すると、ベクトルの大きさが１になる。
-		//大きさが１になるということは、ベクトルから強さがなくなり、方向のみの情報となるということ。
-		Vector3 toPosDir = m_toCameraPos;
-		toPosDir.Normalize();
-		if (toPosDir.y < -0.5f) {
-			//カメラが上向きすぎ。
-			m_toCameraPos = toCameraPosOld;
-		}
-		else if (toPosDir.y > 0.9f) {
-			//カメラが下向きすぎ。
-			m_toCameraPos = toCameraPosOld;
-		}
-		//視点を計算する。
-		Vector3 pos = target + m_toCameraPos;
+		//カメラを更新。
 		//メインカメラに注視点と視点を設定する。
 		m_springCamera.SetTarget(target);
-		m_springCamera.SetPosition(pos);
+
+		//for (int i = 0;i < 100;i++)
+		//{
+			posi = posi * 1.001f;
+
+			//YZIKU++;
+			//pos.z--;
+
+		//}
+		m_springCamera.SetPosition(posi);
 
 		//カメラの更新。
 		m_springCamera.Update();
+
+		//m_springCamera.Update();
 	}
+	else {
+		if (warpCounter->warpCounter == 0)
+		{
+			//カメラを更新。
+			//注視点を計算する。
+			target = m_fastplayer->GetPosition();
+			//プレイヤの足元からちょっと上を注視点とする。
+			target.y += 150.0f;
+			target += g_camera3D->GetForward() * 20.0f;
 
+			Vector3 toCameraPosOld = m_toCameraPos;
+			//パッドの入力を使ってカメラを回す。
+			float x = g_pad[0]->GetRStickXF();
+			float y = g_pad[0]->GetRStickYF();
+			//Y軸周りの回転
+			Quaternion qRot;
+			qRot.SetRotationDeg(Vector3::AxisY, 2.3f * x);
+			qRot.Apply(m_toCameraPos);
+			//X軸周りの回転。
+			Vector3 axisX;
+			axisX.Cross(Vector3::AxisY, m_toCameraPos);
+			axisX.Normalize();
+			qRot.SetRotationDeg(axisX, 2.3f * y);
+			qRot.Apply(m_toCameraPos);
+			//カメラの回転の上限をチェックする。
+			//注視点から視点までのベクトルを正規化する。
+			//正規化すると、ベクトルの大きさが１になる。
+			//大きさが１になるということは、ベクトルから強さがなくなり、方向のみの情報となるということ。
+			Vector3 toPosDir = m_toCameraPos;
+			toPosDir.Normalize();
+			if (toPosDir.y < -0.5f) {
+				//カメラが上向きすぎ。
+				m_toCameraPos = toCameraPosOld;
+			}
+			else if (toPosDir.y > 0.9f) {
+				//カメラが下向きすぎ。
+				m_toCameraPos = toCameraPosOld;
+			}
+			//視点を計算する。
+			pos = target + m_toCameraPos;
+			//メインカメラに注視点と視点を設定する。
+			m_springCamera.SetTarget(target);
+			m_springCamera.SetPosition(pos);
 
-	if (warpCounter->warpCounter != 0)
-	{
-		//カメラを更新。
-		//注視点を計算する。
-		Vector3 target = m_player->GetPosition();
-		//プレイヤの足元からちょっと上を注視点とする。
-		target.y += 150.0f;
-		target += g_camera3D->GetForward() * 20.0f;
-
-		Vector3 toCameraPosOld = m_toCameraPos;
-		//パッドの入力を使ってカメラを回す。
-		float x = g_pad[0]->GetRStickXF();
-		float y = g_pad[0]->GetRStickYF();
-		//Y軸周りの回転
-		Quaternion qRot;
-		qRot.SetRotationDeg(Vector3::AxisY, 2.3f * x);
-		qRot.Apply(m_toCameraPos);
-		//X軸周りの回転。
-		Vector3 axisX;
-		axisX.Cross(Vector3::AxisY, m_toCameraPos);
-		axisX.Normalize();
-		qRot.SetRotationDeg(axisX, 2.3f * y);
-		qRot.Apply(m_toCameraPos);
-		//カメラの回転の上限をチェックする。
-		//注視点から視点までのベクトルを正規化する。
-		//正規化すると、ベクトルの大きさが１になる。
-		//大きさが１になるということは、ベクトルから強さがなくなり、方向のみの情報となるということ。
-		Vector3 toPosDir = m_toCameraPos;
-		toPosDir.Normalize();
-		if (toPosDir.y < -0.5f) {
-			//カメラが上向きすぎ。
-			m_toCameraPos = toCameraPosOld;
+			//カメラの更新。
+			m_springCamera.Update();
 		}
-		else if (toPosDir.y > 0.9f) {
-			//カメラが下向きすぎ。
-			m_toCameraPos = toCameraPosOld;
+
+
+		if (warpCounter->warpCounter != 0)
+		{
+			//カメラを更新。
+			//注視点を計算する。
+			target = m_player->GetPosition();
+			//プレイヤの足元からちょっと上を注視点とする。
+			target.y += 150.0f;
+			target += g_camera3D->GetForward() * 20.0f;
+
+			Vector3 toCameraPosOld = m_toCameraPos;
+			//パッドの入力を使ってカメラを回す。
+			float x = g_pad[0]->GetRStickXF();
+			float y = g_pad[0]->GetRStickYF();
+			//Y軸周りの回転
+			Quaternion qRot;
+			qRot.SetRotationDeg(Vector3::AxisY, 2.3f * x);
+			qRot.Apply(m_toCameraPos);
+			//X軸周りの回転。
+			Vector3 axisX;
+			axisX.Cross(Vector3::AxisY, m_toCameraPos);
+			axisX.Normalize();
+			qRot.SetRotationDeg(axisX, 2.3f * y);
+			qRot.Apply(m_toCameraPos);
+			//カメラの回転の上限をチェックする。
+			//注視点から視点までのベクトルを正規化する。
+			//正規化すると、ベクトルの大きさが１になる。
+			//大きさが１になるということは、ベクトルから強さがなくなり、方向のみの情報となるということ。
+			Vector3 toPosDir = m_toCameraPos;
+			toPosDir.Normalize();
+			if (toPosDir.y < -0.5f) {
+				//カメラが上向きすぎ。
+				m_toCameraPos = toCameraPosOld;
+			}
+			else if (toPosDir.y > 0.9f) {
+				//カメラが下向きすぎ。
+				m_toCameraPos = toCameraPosOld;
+			}
+
+			//視点を計算する。
+			pos = target + m_toCameraPos;
+			//メインカメラに注視点と視点を設定する。
+			m_springCamera.SetTarget(target);
+			m_springCamera.SetPosition(pos);
+
+			posi = pos;
+
+			//カメラの更新。
+			m_springCamera.Update();
 		}
-
-		//視点を計算する。
-		Vector3 pos = target + m_toCameraPos;
-		//メインカメラに注視点と視点を設定する。
-		m_springCamera.SetTarget(target);
-		m_springCamera.SetPosition(pos);
-
-		//カメラの更新。
-		m_springCamera.Update();
 	}
-
 }

@@ -61,9 +61,9 @@ void Menu::Update()
 
 void Menu::Render(RenderContext&rc)
 {
-	m_menuRender.SetMulColor(Vector4(0.5f, 0.5f, 0.5f, 0.6f));
+	m_menuRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.9f));
 	m_menuRender.Draw(rc);
-	m_mapRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.7f));
+	m_mapRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.9f));
 	m_mapRender.Draw(rc);
 
 

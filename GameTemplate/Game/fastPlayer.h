@@ -2,7 +2,7 @@
 
 	//クラス宣言。
 	//class Lever;
-	class Collision;
+	//class Collision;
 	class Game;
 	class WarpCounter;
 
@@ -18,6 +18,8 @@
 			enPlayerState_Run,					//走る。
 			enPlayerState_Walk,					//走る。
 			enPlayerState_ReceiveDamage,		//被ダメージ。
+			enPlayerState_Death,				//死亡。
+			enPlayerState_Roll,					//回転
 			enPlayerState_Attack,				//攻撃。
 		};
 	public:
@@ -172,6 +174,14 @@
 		/// </summary>
 		void ProcessDamageStateTransition();
 		/// <summary>
+		/// 死亡ステートの遷移処理。
+		/// <summary>
+		void ProcessDeathStateTransition();
+		/// </summary>
+		/// 回転ステートの遷移処理。
+		/// </summary>
+		void ProcessRowlingStateTransition();
+		/// <summary>
 	//	void ProcessAttackState2Transition();
 		/// <summary>
 		// アニメーションイベント用の関数。
@@ -186,6 +196,8 @@
 			enAnimationClip_Attack2,			//攻撃アニメーション2。
 			enAnimationClip_Heal,				//回復アニメーション。
 			enAnimationClip_Damage,				//被ダメージアニメーション。
+			enAnimationClip_Death,				//死亡アニメーション。
+			enAnimationClip_Roll,				//回転アニメーション。
 			enAnimationClip_Num,				//アニメーションの数。
 		};
 
@@ -196,6 +208,7 @@
 		Vector3					m_position;									//座標。
 		Vector3					m_moveSpeed;								//移動速度。
 		Vector3					m_forward = Vector3::AxisZ;					//プレイヤーの正面ベクトル。
+		Vector3 m_side = Vector3::AxisX;
 		Vector3					m_scale;									//大きさ。
 		Quaternion				m_rotation;									//クォータニオン。
 		CharacterController		m_charaCon;									//キャラクターコントローラー。
@@ -231,6 +244,8 @@
 		float cooltime = 0.0f;
 		bool COOLtime = false;
 		bool kaihuku = false;
+		bool m_roll = false;
 		float genHP = 0.0f;
 		float timer = 0.0f;
+		PointLight* m_pointLight = nullptr;
 	};

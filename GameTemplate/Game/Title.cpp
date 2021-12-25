@@ -33,7 +33,7 @@ bool Title::Start()
 	m_titleBGM = NewGO<SoundSource>(0);
 	m_titleBGM->Init(2);
 	m_titleBGM->Play(true);
-	m_titleBGM->SetVolume(0.5f);
+	m_titleBGM->SetVolume(0.3f);
 
 
 	m_fade = FindGO<Fade>("fade");
@@ -63,7 +63,7 @@ void Title::Update()
 			SoundSource* se = NewGO<SoundSource>(0);
 			se->Init(0);
 			se->Play(false);
-			se->SetVolume(1.5f);
+			se->SetVolume(0.5f);
 
 		}
 	}

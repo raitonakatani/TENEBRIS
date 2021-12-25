@@ -2,10 +2,12 @@
 
 //クラス宣言。
 //class Lever;
-class Collision;
+//class Collision;
 class Game;
 class fastPlayer;
 class WarpCounter;
+class Telop;
+class Menu;
 
 /// <summary>
 /// プレイヤー。
@@ -21,11 +23,13 @@ public:
 		enPlayerState_ReceiveDamage,		//被ダメージ。
 		enPlayerState_Attack,				//攻撃。
 		enPlayerState_Attack2,				//攻撃2。
-		enPlayerState_Heal					//回復。
+		enPlayerState_Heal,					//回復。
+		enPlayerState_Death,				//死亡。
+		enPlayerState_Roll,					//回転
 	};
 public:
 	Player() {}
-	~Player() {}
+	~Player();
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
@@ -68,25 +72,12 @@ public:
 	/// <returns>動ける状態(ステート)ならtrue。</returns>
 	bool IsEnableMove() const
 	{
-		return m_playerState != enPlayerState_Attack;
-	}
-	/// <summary>
-	/// 動ける状態(ステート)かどうかを取得。
-	/// </summary>
-	/// <returns>動ける状態(ステート)ならtrue。</returns>
-	bool IsEnableMove2() const
-	{
-		return m_playerState != enPlayerState_ReceiveDamage;
-	}
-	/// <summary>
-	/// 動ける状態(ステート)かどうかを取得。
-	/// </summary>
-	/// <returns>動ける状態(ステート)ならtrue。</returns>
-	bool IsEnableMove3() const
-	{
-		return m_playerState != enPlayerState_Heal;
-	}
+		return m_playerState != enPlayerState_Attack &&
+			   m_playerState != enPlayerState_ReceiveDamage &&
+			   m_playerState != enPlayerState_Heal &&
+			   m_playerState != enPlayerState_Death;
 
+	}
 	/// <summary>
 	/// HPを設定
 	/// </summary>
@@ -231,6 +222,15 @@ private:
 	/// <summary>
 	void ProcessHealStateTransition();
 	/// <summary>
+	/// <summary>
+	/// 死亡ステートの遷移処理。
+	/// <summary>
+	void ProcessDeathStateTransition();
+	/// </summary>
+	/// 回転ステートの遷移処理。
+	/// </summary>
+	void ProcessRowlingStateTransition();
+	/// </summary>
 //	void ProcessAttackState2Transition();
 	/// <summary>
 	// アニメーションイベント用の関数。
@@ -245,6 +245,8 @@ private:
 		enAnimationClip_Attack2,			//攻撃アニメーション2。
 		enAnimationClip_Heal,				//回復アニメーション。
 		enAnimationClip_Damage,				//被ダメージアニメーション。
+		enAnimationClip_Death,				//死亡アニメーション。
+		enAnimationClip_Roll,				//回転アニメーション。
 		enAnimationClip_Num,				//アニメーションの数。
 	};
 	AnimationClip			m_animationClips[enAnimationClip_Num];		//アニメーションクリップ。
@@ -252,6 +254,7 @@ private:
 	Vector3					m_position;									//座標。
 	Vector3					m_moveSpeed;								//移動速度。
 	Vector3					m_forward = Vector3::AxisZ;					//プレイヤーの正面ベクトル。
+	Vector3					m_right = Vector3::AxisX;					//プレイヤーの正面ベクトル。
 	Vector3					m_scale;									//大きさ。
 	Quaternion				m_rotation;									//クォータニオン。
 	CharacterController		m_charaCon;									//キャラクターコントローラー。
@@ -268,13 +271,18 @@ private:
 	FontRender				m_fontRender3;					            //文字　鍵の所持数の表示。
 	EffectEmitter*			m_effectEmitter = nullptr;					//エフェクト。
 	Game*					m_game = nullptr;							//ゲーム。
+	Menu* menu = nullptr;
+	Telop* m_telop;
 	fastPlayer* m_fastplayer;
 	WarpCounter* warpCounter = nullptr;
 	bool					m_isUnderAttack = false;					//攻撃中ならtrue。
-	bool					m_isUnderHeal = false;						//攻撃中ならtrue。
-	float					m_hp = 100.0f;								//プレイヤーのHP。
+	bool					m_isUnderHeal = false;						//回復中ならtrue。
+	bool					m_isEffect = false;						//エフェクト再生中ならtrue。
+	bool					m_menu = false;
+	float					m_hp = 200.0f;								//プレイヤーのHP。
 	float					life = 100.0f;								//フルHPバー
 	int                     m_sword_jointBoneId = -1;                   //「Sword」ボーンのID。
+	int                     m_sword_jointBoneId2 = -1;                   //「Sword」ボーンのID。
 	float m_sutamina = 150.0f;		//スタミナ。
 	float m_hurusutamina = 150.0f;	//フルスタミナ。
 	float hpber = 1.0f;
@@ -286,6 +294,7 @@ private:
 	float cooltime = 0.0f;
 	bool COOLtime = false;
 	bool kaihuku = false;
+	bool m_roll = false;
 	float genHP = 0.0f;
 	float timer = 0.0f;
 	PointLight* m_pointLight = nullptr;

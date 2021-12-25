@@ -55,6 +55,11 @@ public:
 		m_sibouEnemy++;
 	}
 
+	int GetsibouEnemy()
+	{
+		return m_numDefeatedEnemy;
+	}
+
 	int GetnumEnemydesu()
 	{
 		return m_sibouEnemy;
@@ -73,8 +78,20 @@ public:
 		return m_menu == true;
 	}
 
+	void SetBGM()
+	{
+		BGMchange++;
+	}
+
+	int GetBGM()
+	{
+		return BGMchange;
+	}
 
 private:
+
+	int BGMchange = 0;
+
 	Player*						m_player;						//プレイヤー。
 	fastPlayer* m_fastplayer;
 	Fire* m_fire;
@@ -89,6 +106,8 @@ private:
 	SpriteRender				m_spriteRender;					//画像。
 	FontRender					m_fontRender;					//文字。
 	SoundSource*				GameBGM;
+	SoundSource*				BossBGM;
+	float BGMvolume = 0.5f;
 	std::vector<Door*>			m_doorVector;					//ドアの配列。
 	Vector3						m_position;						//座標。
 	LevelRender					m_levelRender;					//レベルレンダー。
@@ -100,7 +119,7 @@ private:
 	bool						m_isWaitFadeout = false;
 	bool						m_menu = false;
 	int							m_sibouEnemy = 5;
-	int							m_numEnemy = 2;					//エネミーの数。
+	int							m_numEnemy = 5;					//エネミーの数。
 	int							m_numDefeatedEnemy = 0;			//倒されたエネミーの数。
 	float						a = 0.0f;						//拡大率
 	float						t = 30.0f;						//タイマー。

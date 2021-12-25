@@ -69,9 +69,11 @@ bool Enemy3::Start()
 
 	m_spriteRender.Init("Assets/sprite/HP.dds", 64.0f, 32.0f);
 	//表示する座標を設定する。
-	m_spriteRender.SetPosition({ 0.0f,450.0f ,0.0f });
+	m_spriteRender.SetPosition({ 0.0f,400.0f ,0.0f });
 
 	m_player = FindGO<Player>("player");
+	m_game = FindGO<Game>("game");
+
 	//乱数を初期化。
 	srand((unsigned)time(NULL));
 	m_forward = Vector3::AxisZ;
@@ -81,19 +83,21 @@ bool Enemy3::Start()
 
 void Enemy3::Update()
 {
-	//追跡処理。
-	Chase();
-	//回転処理。
-	Rotation();
-	//当たり判定。
-	Collision();
-	//攻撃処理。
-	Attack();
-	//アニメーションの再生。
-	PlayAnimation();
-	//ステートの遷移処理。
-	ManageState();
-
+	if (m_player->GetPlayerHP() != 0)
+	{
+		//追跡処理。
+		Chase();
+		//回転処理。
+		Rotation();
+		//当たり判定。
+		Collision();
+		//攻撃処理。
+		Attack();
+		//アニメーションの再生。
+		PlayAnimation();
+		//ステートの遷移処理。
+		ManageState();
+	}
 
 	modeltimer += g_gameTime->GetFrameDeltaTime();
 
@@ -109,6 +113,9 @@ void Enemy3::Update()
 			m_effectEmitter->Play();
 			modeltimer = 0.0f;
 
+			if (m_game->GetBGM() == 2) {
+				m_game->SetBGM();
+			}
 		}
 		model = true;
 	}
@@ -171,14 +178,6 @@ void Enemy3::Update()
 	if (m_player->level == 3)
 	{
 		karyoku = 3;
-	}
-	if (m_player->level == 4)
-	{
-		karyoku = 4;
-	}
-	if (m_player->level == 5)
-	{
-		karyoku = 5;
 	}
 
 	//モデルの更新。
@@ -372,7 +371,7 @@ void Enemy3::ProcessCommonStateTransition()
 		{
 			//乱数によって、攻撃するか待機させるかを決定する。	
 			int ram = rand() % 100;
-			if (ram > 30)
+			if (ram > 4)
 			{
 				//攻撃ステートに遷移する。
 				m_Enemy3State = enEnemy3State_Attack;
@@ -573,7 +572,7 @@ void Enemy3::PlayAnimation()
 		break;
 		//攻撃ステートの時。
 	case enEnemy3State_Attack:
-		m_modelRender.SetAnimationSpeed(1.4f);
+		m_modelRender.SetAnimationSpeed(1.3f);
 		//攻撃アニメーションを再生。
 		m_modelRender.PlayAnimation(enAnimationClip_Attack, 0.1f);
 		break;
@@ -585,7 +584,7 @@ void Enemy3::PlayAnimation()
 		break;
 		//被ダメージステートの時。
 	case enEnemy3State_ReceiveDamage:
-		m_modelRender.SetAnimationSpeed(1.3f);
+		m_modelRender.SetAnimationSpeed(1.1f);
 		//被ダメージアニメーションを再生。
 		m_modelRender.PlayAnimation(enAnimationClip_Damage, 0.1f);
 		break;
@@ -635,9 +634,6 @@ const bool Enemy3::IsCanAttack() const
 void Enemy3::MODEL()
 {
 	m_model = 1;
-
-
-
 }
 
 void Enemy3::Render(RenderContext& rc)
@@ -650,11 +646,14 @@ void Enemy3::Render(RenderContext& rc)
 	else {
 		return;
 	}
-	//画像を描画する。
-	if (m_isShowHPBar == true) {
-		m_spriteRender.Draw(rc);
-	}
-	else {
-		return;
+	if (m_player->GetPlayerHP() != 0)
+	{
+		//画像を描画する。
+		if (m_isShowHPBar == true) {
+			m_spriteRender.Draw(rc);
+		}
+		else {
+			return;
+		}
 	}
 }

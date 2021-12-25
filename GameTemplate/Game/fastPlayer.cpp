@@ -29,12 +29,16 @@ bool fastPlayer::Start()
 	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
 	m_animationClips[enAnimationClip_Run].Load("Assets/animData2/run.tka");
 	m_animationClips[enAnimationClip_Run].SetLoopFlag(true);
-	m_animationClips[enAnimationClip_Walk].Load("Assets/animData2/run.tka");
+	m_animationClips[enAnimationClip_Walk].Load("Assets/animData2/Walk.tka");
 	m_animationClips[enAnimationClip_Walk].SetLoopFlag(true);
 	m_animationClips[enAnimationClip_Damage].Load("Assets/animData2/damage.tka");
 	m_animationClips[enAnimationClip_Damage].SetLoopFlag(false);
-	m_animationClips[enAnimationClip_Attack].Load("Assets/animData2/attack.tka");
+	m_animationClips[enAnimationClip_Attack].Load("Assets/animData2/attack2.tka");
 	m_animationClips[enAnimationClip_Attack].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Death].Load("Assets/animData2/Death.tka");
+	m_animationClips[enAnimationClip_Death].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Roll].Load("Assets/animData2/Rowling.tka");
+	m_animationClips[enAnimationClip_Roll].SetLoopFlag(false);
 
 	// 番号を指定して、efkファイルを読み込む。
 	//EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/efk/syoukann.efk");
@@ -61,8 +65,19 @@ bool fastPlayer::Start()
 	//エフェクトを読み込む。
 	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/efk/Heal.efk");
 
+	//音を読み込む。
+	g_soundEngine->ResistWaveFileBank(9, "Assets/sound/9Step.wav");
+
+
 	//「Sword」ボーンのID(番号)を取得する。
 	m_sword_jointBoneId = m_modelRender.FindBoneID(L"sword_joint");
+
+	m_pointLight = g_sceneLight->NewPointLight();
+
+	m_pointLight->SetColor(Vector3::One * 0.9f);
+	m_pointLight->SetAffectPowParam(0.2f);
+	m_pointLight->SetRange(125.0f);
+	m_pointLight->SetPosition(m_position + Vector3(0.0f, 70.0f, 0.0f));
 
 	return true;
 }
@@ -90,6 +105,9 @@ void fastPlayer::Update()
 	if (warpCounter->warpCounter != 0) {
 		DeleteGO(this);
 	}
+
+	m_pointLight->SetPosition(m_position + Vector3(0.0f, 100.0f, 0.0f));
+
 	//モデルの更新。
 	m_modelRender.Update();
 
@@ -113,11 +131,11 @@ void fastPlayer::Move()
 		//ダメージ
 		return;
 	}
-
 	
 	if (IsEnableMove() == true || IsEnableMove2() == true) {
 		if (m_game->IsMove() == true)
 		{
+			m_sutamina++;
 			m_playerState = enPlayerState_Idle;
 			m_moveSpeed.x = 0.0f;
 			m_moveSpeed.z = 0.0f;
@@ -144,23 +162,53 @@ void fastPlayer::Move()
 
 /*	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_moveSpeed.y += 1000.0f;
+		m_moveSpeed.y += 500.0f;
 	}
 */
-	if (COOLtime == false)
+
+/*	if (g_pad[0]->IsTrigger(enButtonB))
 	{
-		if (g_pad[0]->IsPress(enButtonLB1) && m_sutamina > 0)
-		{
-			m_moveSpeed += cameraForward * lStick_y * 600.0f;	//奥方向への移動速度を加算。
-			m_moveSpeed += cameraRight * lStick_x * 600.0f;		//右方向への移動速度を加算。
-		}
-		else
-		{
-			m_moveSpeed += cameraForward * lStick_y * 400.0f;	//奥方向への移動速度を加算。
-			m_moveSpeed += cameraRight * lStick_x * 400.0f;		//右方向への移動速度を加算。
-		}
+		m_moveSpeed += m_forward * 200.0f;
+	}
+*/
+
+	timer += g_gameTime->GetFrameDeltaTime();
+	if (g_pad[0]->IsTrigger(enButtonB)
+		&& m_roll == false
+		/*&& m_sutamina >= 30.0f*/)
+	{
+		timer = 0.0f;
+		m_roll = true;
+		//m_sutamina -= 30.0f;
 	}
 
+	if (m_roll == true)
+	{
+		if (timer <= 1.2f)
+		{
+			m_moveSpeed += m_forward * 500.0f;	//奥方向への移動速度を加算。
+		}
+		else if (timer >= 1.2f)
+		{
+			timer = 0.0f;
+			m_roll = false;
+		}
+	}
+	else {
+		if (COOLtime == false)
+		{
+			if (g_pad[0]->IsPress(enButtonLB1) && m_sutamina > 0)
+			{
+				m_moveSpeed += cameraForward * lStick_y * 600.0f;	//奥方向への移動速度を加算。
+				m_moveSpeed += cameraRight * lStick_x * 600.0f;		//右方向への移動速度を加算。
+			}
+			else
+			{
+				m_moveSpeed += cameraForward * lStick_y * 300.0f;	//奥方向への移動速度を加算。
+				m_moveSpeed += cameraRight * lStick_x * 300.0f;		//右方向への移動速度を加算。
+			}
+		}
+	}
 	
 	//キャラクターコントローラーを使用して、座標を更新。
 	m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
@@ -266,32 +314,37 @@ void fastPlayer::ProcessCommonStateTransition()
 		return;
 	}
 
-
-	//xかzの移動速度があったら(スティックの入力があったら)。
-	if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
+	if (m_roll == true)
 	{
-		//移動速度が一定以上だったら。
-		if (g_pad[0]->IsPress(enButtonLB2))
+		m_playerState = enPlayerState_Roll;
+	}
+	else {
+		//xかzの移動速度があったら(スティックの入力があったら)。
+		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
 		{
-			//m_sutamina--;
-			//ステートを走りにする。
-			m_playerState = enPlayerState_Run;
-			return;
+			//移動速度が一定以上だったら。
+			if (g_pad[0]->IsPress(enButtonLB1))
+			{
+				//m_sutamina--;
+				//ステートを走りにする。
+				m_playerState = enPlayerState_Run;
+				return;
+			}
+			else
+			{
+				//歩きにする。
+				m_playerState = enPlayerState_Walk;
+				return;
+			}
+
 		}
+		//xとzの移動速度が無かったら(スティックの入力が無かったら)。
 		else
 		{
-			//歩きにする。
-			m_playerState = enPlayerState_Walk;
+			//ステートを待機にする。
+			m_playerState = enPlayerState_Idle;
 			return;
 		}
-
-	}
-	//xとzの移動速度が無かったら(スティックの入力が無かったら)。
-	else
-	{
-		//ステートを待機にする。
-		m_playerState = enPlayerState_Idle;
-		return;
 	}
 }
 
@@ -342,6 +395,24 @@ void fastPlayer::ProcessDamageStateTransition()
 	}
 }
 
+void fastPlayer::ProcessDeathStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+
+void fastPlayer::ProcessRowlingStateTransition()
+{
+	ProcessCommonStateTransition();
+/*	//攻撃アニメーションの再生が終わったら。
+	if (m_modelRender.IsPlayingAnimation() == false)
+	{
+		//ステートを遷移する。
+		m_playerState = enPlayerState_Idle;
+	}
+*/
+}
+
 void fastPlayer::ManageState()
 {
 	switch (m_playerState)
@@ -370,6 +441,12 @@ void fastPlayer::ManageState()
 		//攻撃ステートのステート遷移処理。
 		ProcessAttackStateTransition();
 		break;
+	case enPlayerState_Death:
+		ProcessDeathStateTransition();
+		break;
+	case enPlayerState_Roll:
+		ProcessRowlingStateTransition();
+		break;
 	}
 }
 
@@ -381,30 +458,41 @@ void fastPlayer::PlayAnimation()
 		//待機ステートの時。
 	case enPlayerState_Idle:
 		//待機アニメーションを再生。
-		m_modelRender.PlayAnimation(enAnimationClip_Idle, 0.5f);
+		m_modelRender.PlayAnimation(enAnimationClip_Idle, 0.2f);
 		break;
 		//走りステートの時。
 	case enPlayerState_Run:
 		m_modelRender.SetAnimationSpeed(1.2f);
 		//走りアニメーションを再生。
-		m_modelRender.PlayAnimation(enAnimationClip_Run, 0.5f);
+		m_modelRender.PlayAnimation(enAnimationClip_Run, 0.2f);
 		break;
+		//歩きステートの時。
 	case enPlayerState_Walk:
-		m_modelRender.SetAnimationSpeed(1.0f);
-		//走りアニメーションを再生。
-		m_modelRender.PlayAnimation(enAnimationClip_Walk, 0.5f);
+		m_modelRender.SetAnimationSpeed(1.5f);
+		//歩きアニメーションを再生。
+		m_modelRender.PlayAnimation(enAnimationClip_Walk, 0.1f);
 		break;
 		//被ダメージステートの時。
 	case enPlayerState_ReceiveDamage:
 		m_modelRender.SetAnimationSpeed(0.8f);
 		//被ダメージアニメーションを再生。
-		m_modelRender.PlayAnimation(enAnimationClip_Damage, 0.5f);
+		m_modelRender.PlayAnimation(enAnimationClip_Damage, 0.2f);
 		break;
 		//攻撃ステートの時。
 	case enPlayerState_Attack:
-		m_modelRender.SetAnimationSpeed(1.0f);
+		m_modelRender.SetAnimationSpeed(1.2f);
 		//攻撃アニメーションを再生。
-		m_modelRender.PlayAnimation(enAnimationClip_Attack, 0.5f);
+		m_modelRender.PlayAnimation(enAnimationClip_Attack, 0.2f);
+		break;
+	case enPlayerState_Death:
+		m_modelRender.SetAnimationSpeed(1.0f);
+		//死亡アニメーションを再生。
+		m_modelRender.PlayAnimation(enAnimationClip_Death, 0.5f);
+		break;
+	case enPlayerState_Roll:
+		m_modelRender.SetAnimationSpeed(1.0f);
+		//回避アニメーションを再生。
+		m_modelRender.PlayAnimation(enAnimationClip_Roll, 0.2f);
 		break;
 	default:
 		break;
@@ -423,6 +511,15 @@ void fastPlayer::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventN
 	else if (wcscmp(eventName, L"attack_end") == 0) {
 		//攻撃を終わる。
 		m_isUnderAttack = false;
+	}
+
+	 if (wcscmp(eventName, L"Walk_step") == 0) {
+		//足音。
+		 //効果音を再生する。
+		 SoundSource* stepse = NewGO<SoundSource>(0);
+		 stepse->Init(9);
+		 stepse->Play(false);
+		 stepse->SetVolume(1.5f);
 	}
 
 }

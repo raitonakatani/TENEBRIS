@@ -34,4 +34,11 @@ private:
 	Vector3 m_toCameraPos;	//注視点から視点に向かうベクトル。
 	Vector3 m_Pos;	//注視点から視点に向かうベクトル。
 	SpringCamera m_springCamera;	//ばねカメラ。
+
+	Vector3 target;
+	Vector3 pos;
+	Vector3 posi;
+
+	float YZIKU = 200.0f;
+	float ZZIKU = -200.0f;
 };

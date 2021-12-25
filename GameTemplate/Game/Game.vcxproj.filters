@@ -34,6 +34,8 @@
     <ClCompile Include="WarpCounter.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Kisi.cpp" />
+    <ClCompile Include="MovingFloor.cpp" />
+    <ClCompile Include="Telop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -63,5 +65,7 @@
     <ClInclude Include="WarpCounter.h" />
     <ClInclude Include="Fire.h" />
     <ClInclude Include="Kisi.h" />
+    <ClInclude Include="MovingFloor.h" />
+    <ClInclude Include="Telop.h" />
   </ItemGroup>
 </Project>

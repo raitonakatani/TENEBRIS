@@ -98,19 +98,21 @@ bool Kisi::Start()
 
 void Kisi::Update()
 {
-	//追跡処理。
-	Chase();
-	//回転処理。
-	Rotation();
-	//当たり判定。
-	Collision();
-	//攻撃処理。
-	Attack();
-	//アニメーションの再生。
-	PlayAnimation();
-	//ステートの遷移処理。
-	ManageState();
-
+	if (m_player->GetPlayerHP() != 0)
+	{
+		//追跡処理。
+		Chase();
+		//回転処理。
+		Rotation();
+		//当たり判定。
+		Collision();
+		//攻撃処理。
+		Attack();
+		//アニメーションの再生。
+		PlayAnimation();
+		//ステートの遷移処理。
+		ManageState();
+	}
 
 	modeltimer += g_gameTime->GetFrameDeltaTime();
 
@@ -188,14 +190,7 @@ void Kisi::Update()
 	{
 		karyoku = 3;
 	}
-	if (m_player->level == 4)
-	{
-		karyoku = 4;
-	}
-	if (m_player->level == 5)
-	{
-		karyoku = 5;
-	}
+
 	//モデルの更新。
 	m_modelRender.Update();
 }
@@ -344,7 +339,7 @@ void Kisi::MakeAttackCollision()
 	//剣のボーンのワールド行列を取得する。
 	Matrix matrix = m_modelRender.GetBone(m_swordBoneId)->GetWorldMatrix();
 	//ボックス状のコリジョンを作成する。
-	collisionObject->CreateBox(m_position, Quaternion::Identity, Vector3(170.0f, 20.0f, 20.0f));
+	collisionObject->CreateBox(m_position, Quaternion::Identity, Vector3(200.0f, 15.0f, 15.0f));
 	collisionObject->SetWorldMatrix(matrix);
 	collisionObject->SetName("enemy_attack");
 }
@@ -645,10 +640,13 @@ void Kisi::Render(RenderContext& rc)
 		return;
 	}
 
-	if (m_isShowHPBar == true) {
-		m_spriteRender.Draw(rc);
-	}
-	else {
-		return;
+	if (m_player->GetPlayerHP() != 0)
+	{
+		if (m_isShowHPBar == true) {
+			m_spriteRender.Draw(rc);
+		}
+		else {
+			return;
+		}
 	}
 }

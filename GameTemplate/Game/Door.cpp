@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "Door.h"
+#include "Game.h"
 #include "Player.h"
 #include "Kisi.h"
 #include "Enemy2.h"
 #include "Enemy3.h"
 #include "Enemy4.h"
+
 
 Door::Door()
 {
@@ -34,7 +36,15 @@ bool Door::Start()
 	//回転を設定する。
 	m_modelRender.SetRotation(m_rotation);
 
+	m_telopRender.Init("Assets/sprite/huti.dds", 800.0f, 200.0f);
+	//表示する座標を設定する。
+	m_telopRender.SetPosition({ 0.0f,-300.0f ,0.0f });
+
 	m_player = FindGO<Player>("player");
+
+	m_game = FindGO<Game>("game");
+
+	g_soundEngine->ResistWaveFileBank(8, "Assets/sound/8Door.wav");
 
 	//モデルの更新。
 	m_modelRender.Update();
@@ -52,43 +62,79 @@ void Door::Update()
 	//ステート管理。
 	ManageState();
 
-
+	if (m_player->GetBOSS() == 0)
+	{
+		auto boss = FindGO<Enemy3>("enemy3");
+		Vector3 diff2 = boss->GetPosition() - m_player->GetPosition();
+		if (diff2.Length() <= 1200.0f)
+		{
+			if (m_doorState == enDoorState_Open_Idle)
+			{
+				SoundSource* doorse = NewGO<SoundSource>(0);
+				doorse->Init(8);
+				doorse->Play(false);
+				doorse->SetVolume(2.0f);
+				NotifyClose();
+			}
+		}
+	}
 	//プレイヤーから☆に向かうベクトルを計算。
-	Vector3 diff = m_player->GetPosition() - m_position;
+	Vector3 DOORPOSI = m_position;
+	DOORPOSI.y -= 500.0f;
+	Vector3 diff = m_player->GetPosition() - DOORPOSI;
 	//ベクトルの長さが120.0fより小さかったら。
-	if (diff.LengthSq() <= 500.0f * 500.0f)
+	if (diff.Length() <= 300.0f)
 	{
 		if (m_doorState == enDoorState_Idle)
 		{
 			door = true;
 
-			//if (m_player->GetKAGI() == 1)
-			//{
-				m_fontRender.SetText(L"扉を開ける。\nAボタン");
+
+			/*
+			m_game->GetsibouEnemy() == 0 && m_DoorCount == 0 || m_game->GetsibouEnemy() == 0 && m_DoorCount == 1 ||
+				m_game->GetsibouEnemy() == 4 && m_DoorCount == 2 ||
+				m_game->GetsibouEnemy() == 5 && m_DoorCount == 3 ||
+				m_game->GetsibouEnemy() == 10 && m_DoorCount == 4 ||
+				m_game->GetsibouEnemy() == 11 && m_DoorCount == 5 ||
+				m_game->GetsibouEnemy() == 17 && m_DoorCount == 6 || m_game->GetsibouEnemy() == 17 && m_DoorCount == 7
+			*/
+			if (m_game->GetsibouEnemy() == 0 ||
+				m_game->GetsibouEnemy() == 4 ||
+				m_game->GetsibouEnemy() == 5 ||
+				m_game->GetsibouEnemy() == 10||
+				m_game->GetsibouEnemy() == 11 ||
+				m_game->GetsibouEnemy() == 17 
+				)
+			{
+				m_fontRender.SetText(L"扉を開ける。\n \n Aボタン");
 				//表示する座標を設定する。
-				m_fontRender.SetPosition({ -100.0f,300.0f,0.0f });
+				m_fontRender.SetPosition({ -150.0f,-250.0f,0.0f });
 				//文字の大きさを変える。
-				//fontRender.SetScale(1.5f);
+				//m_fontRender.SetScale(1.5f);
 				//表示する色を設定する。
 				m_fontRender.SetColor(g_vec4White);
 
+			
+					if (g_pad[0]->IsTrigger(enButtonA))
+					{
+						m_DoorCount += 1;
+						SoundSource* doorse = NewGO<SoundSource>(0);
+						doorse->Init(8);
+						doorse->Play(false);
+						doorse->SetVolume(2.0f);
 
-				if (g_pad[0]->IsTrigger(enButtonA))
-				{
-					NotifyOpen();
-				}
-				//}
-		/*	else if (m_player->GetKAGI() == 0)
-			{
-				m_fontRender2.SetText(L"カギを所持していません。");
-				//表示する座標を設定する。
-				m_fontRender2.SetPosition({ -100.0f,300.0f,0.0f });
-				//文字の大きさを変える。
-				//fontRender.SetScale(1.5f);
-				//表示する色を設定する。
-				m_fontRender2.SetColor(g_vec4Black);
+						NotifyOpen();
+					}
 			}
-			*/
+			else {
+				m_fontRender.SetText(L"カギが閉まっている");
+				//表示する座標を設定する。
+				m_fontRender.SetPosition({ -150.0f,-250.0f,0.0f });
+				//文字の大きさを変える。
+				//m_fontRender.SetScale(1.5f);
+				//表示する色を設定する。
+				m_fontRender.SetColor(g_vec4White);
+			}
 		}
 		else
 		{
@@ -101,6 +147,7 @@ void Door::Update()
 
 	//モデルの更新。
 	m_modelRender.Update();
+	m_telopRender.Update();
 }
 
 void Door::NotifyOpen()
@@ -128,13 +175,13 @@ void Door::PlayAnimation()
 	case enDoorState_Open:
 		//オープンアニメーションを再生する。
 		m_modelRender.PlayAnimation(enAnimationClip_Open);
-		m_modelRender.SetAnimationSpeed(1.2f);
+		m_modelRender.SetAnimationSpeed(0.8f);
 		break;
 		//クローズステートの時。
 	case enDoorState_Close:
 		//クローズアニメーションを再生する。
 		m_modelRender.PlayAnimation(enAnimationClip_Close);
-		m_modelRender.SetAnimationSpeed(0.6f);
+		m_modelRender.SetAnimationSpeed(0.8f);
 		break;
 	default:
 		break;
@@ -158,6 +205,13 @@ void Door::ProcessOpenStateTransition()
 	if (m_modelRender.IsPlayingAnimation() == true) {
 		//当たり判定を開放する。
 		ReleasePhysicsObject();
+
+
+		auto bosss = FindGOs<Enemy3>("enemy3");
+		for (auto boss : bosss) {
+			if(m_game->GetBGM()==0 && m_doorNumber == boss->GetbossNumber())
+			m_game->SetBGM();
+		}
 	}
 
 	//オープンアニメーションの再生が終了したら。
@@ -265,6 +319,9 @@ void Door::Render(RenderContext& rc)
 	//ドアに近づいたとき。
 	if (door == true)
 	{
+
+		m_telopRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.7f));
+		m_telopRender.Draw(rc);
 		//文字を描写する。
 		m_fontRender.Draw(rc);
 
