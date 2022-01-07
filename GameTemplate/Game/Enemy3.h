@@ -84,6 +84,16 @@ public:
 		return m_bossNumber;
 	}
 
+	void PlusBOSSBEYA()
+	{
+		m_bossbeya++;
+	}
+
+	int GetBOSSBEYA()
+	{
+		return m_bossbeya;
+	}
+
 private:
 	/// <summary>
 	/// ’ÇÕˆ—B
@@ -200,6 +210,7 @@ private:
 	int m_model = 0;
 	int karyoku = 1;
 	int m_bossNumber = 0;
+	int m_bossbeya = 0;
 };
 
 

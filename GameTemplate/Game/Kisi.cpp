@@ -499,7 +499,7 @@ void Kisi::ProcessDownStateTransition()
 	{
 		Game* game = FindGO<Game>("game");
 		int radm = rand() % 100;
-		if (radm >= 70) {
+		if (radm >= 7) {
 			Portion* portion = NewGO<Portion>(0, "portion");
 			portion->SetPosition(m_position);
 		}

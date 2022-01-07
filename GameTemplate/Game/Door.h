@@ -116,7 +116,8 @@ private:
 	Quaternion					m_rotation;								//回転。
 	Vector3						m_scale = Vector3::One;					//大きさ。
 	FontRender					m_fontRender;							//カギを所持しているとき。
-	SpriteRender m_telopRender;
+	SpriteRender				m_telopRender;							//テロップ
+	SpriteRender				m_kaiwa1Render;							//文字
 	enum EnAnimationClip {												//アニメーション。
 		enAnimationClip_Idle,											//待機。	
 		enAnimationClip_Open,											//オープン。

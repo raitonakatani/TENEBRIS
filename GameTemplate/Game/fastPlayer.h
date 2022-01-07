@@ -5,6 +5,7 @@
 	//class Collision;
 	class Game;
 	class WarpCounter;
+	class Telop;
 
 	/// <summary>
 	/// プレイヤー。
@@ -120,6 +121,17 @@
 			return m_boss;
 		}
 
+		void PlusMOVE()
+		{
+			MOVED++;
+		}
+
+		int GetMOVE()
+		{
+			return MOVED;
+		}
+
+
 	private:
 		/// <summary>
 		/// 移動処理。
@@ -227,6 +239,7 @@
 		FontRender				m_fontRender3;					            //文字　鍵の所持数の表示。
 		EffectEmitter* m_effectEmitter = nullptr;					//エフェクト。
 		Game* m_game = nullptr;							//ゲーム。
+		Telop* m_telop;
 		bool					m_isUnderAttack = false;					//攻撃中ならtrue。
 		bool					m_isUnderHeal = false;						//攻撃中ならtrue。
 		float					m_hp = 100.0f;								//プレイヤーのHP。
@@ -241,6 +254,7 @@
 		float					m_timer = 0.0f;								//タイマー。
 		int						m_portion = 0;								//ポーション。
 		int						m_boss = 0;									//ボス。
+		int MOVED = 0;
 		float cooltime = 0.0f;
 		bool COOLtime = false;
 		bool kaihuku = false;

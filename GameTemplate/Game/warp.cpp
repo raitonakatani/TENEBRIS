@@ -3,6 +3,7 @@
 #include "fastPlayer.h"
 #include "Player.h"
 #include "WarpCounter.h"
+#include "Telop.h"
 
 #include "sound/SoundEngine.h"
 #include "sound/SoundSource.h"
@@ -20,14 +21,14 @@ warp::~warp()
 bool warp::Start()
 {
 	//☆のモデルを読み込む。
-	m_modelRender.Init("Assets/modelData/Enemy/enemy2.tkm");
+	m_modelRender.Init("Assets/modelData/Warp/syouninn.tkm");
 	m_modelRender.SetScale({ 2.5f,2.5f,2.5f });
-	m_modelRender.SetPosition({ 0.0f, 250.0f, -16500.0f });
+	m_modelRender.SetPosition({ 0.0f, 200.0f, -16500.0f });
 	//warp
 	//プレイヤーのオブジェクトを探して持ってくる。
 	m_fastplayer = FindGO<fastPlayer>("fastplayer");
 	warpCounter = FindGO<WarpCounter>("WarpCounter");
-
+	m_telop = FindGO<Telop>("telop");
 
 	return(true);
 }
@@ -36,6 +37,8 @@ void warp::Update()
 {
 	if (warpCounter->warpCounter == 0)
 	{
+
+
 		//回転処理。
 		Rotation();
 
@@ -53,30 +56,81 @@ void warp::Update()
 		//ベクトルの長さが120.0fより小さかったら。
 		if (diff.Length() <= 300.0f)
 		{
-			if (g_pad[0]->IsTrigger(enButtonA))
+
+			if (m_telop->Getkaiwa() == 0)
 			{
-				//カウントを+1する。
-				warpCounter->warpCounter = 1;
-
-				//音を読み込む。
-				g_soundEngine->ResistWaveFileBank(0, "Assets/sound/0titlebutton.wav");
-				//効果音を再生する。
-				SoundSource* se = NewGO<SoundSource>(0);
-				se->Init(0);
-				se->Play(false);
-				se->SetVolume(0.8f);
-
-				//自信を削除する。
-				DeleteGO(this);
+				if (g_pad[0]->IsTrigger(enButtonA)) {
+					m_telop->Pluskaiwa();
+					m_fastplayer->PlusMOVE();
+				}
 			}
-			/*g_soundEngine->ResistWaveFileBank(4, "Assets/sound/4get.wav");
-			//効果音を再生する。
-			SoundSource* Getse = NewGO<SoundSource>(0);
-			Getse->Init(4);
-			Getse->Play(false);
-			Getse->SetVolume(1.5f);*/
+			if (m_telop->Getkaiwa() == 1)
+			{
+				m_timer += g_gameTime->GetFrameDeltaTime();
+
+				if (m_timer > 0.1f)
+				{
+					if (m_telop->Getsentaku() == 0)
+					{
+						if (g_pad[0]->IsTrigger(enButtonA)) {
+							warpCounter->warpCounter = 1;
+							//音を読み込む。
+							g_soundEngine->ResistWaveFileBank(0, "Assets/sound/0titlebutton.wav");
+							//効果音を再生する。
+							SoundSource* se = NewGO<SoundSource>(0);
+							se->Init(0);
+							se->Play(false);
+							se->SetVolume(0.3f);
+
+							//自信を削除する。
+							DeleteGO(this);
+						}
+					}
+					if (m_telop->Getsentaku() == 1)
+					{
+						if (g_pad[0]->IsTrigger(enButtonA)) {
+							m_telop->Pluskaiwa();
+							m_fastplayer->PlusMOVE();
+							m_timer = 0.0f;
+						}
+					}
+
+				}
+			}
+			if (m_telop->Getkaiwa() == 2)
+			{
+				m_timer += g_gameTime->GetFrameDeltaTime();
+
+				if (m_timer > 0.1f)
+				{
+					if (g_pad[0]->IsTrigger(enButtonA)) {
+						m_telop->Pluskaiwa();
+						m_fastplayer->PlusMOVE();
+						m_timer = 0.0f;
+					}
+				}
+			}
 
 
+
+			/*
+				if (g_pad[0]->IsTrigger(enButtonA))
+					{
+						//カウントを+1する。
+						warpCounter->warpCounter = 1;
+
+						//音を読み込む。
+						g_soundEngine->ResistWaveFileBank(0, "Assets/sound/0titlebutton.wav");
+						//効果音を再生する。
+						SoundSource* se = NewGO<SoundSource>(0);
+						se->Init(0);
+						se->Play(false);
+						se->SetVolume(0.3f);
+
+						//自信を削除する。
+						DeleteGO(this);
+					}
+			*/
 		}
 	}
 }

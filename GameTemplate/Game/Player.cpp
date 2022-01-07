@@ -58,9 +58,9 @@ bool Player::Start()
 		OnAnimationEvent(clipName, eventName);});
 
 
-	m_HPberRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
+	m_HPberRender.Init("Assets/sprite/HPBer.dds", 525.0f, 44.0f);
 	//表示する座標を設定する。
-	m_HPberRender.SetPosition({ -694.0f,500.0f ,0.0f });
+	m_HPberRender.SetPosition({ -692.0f,500.0f ,0.0f });
 	m_HPRender.SetPivot({ 0.0f, 0.5f });
 
 	m_HPRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
@@ -68,17 +68,17 @@ bool Player::Start()
 	m_HPRender.SetPosition({ -950.0f,500.0f ,0.0f });
 	m_HPRender.SetPivot({ 0.0f, 0.5f });
 
-	m_stmnberRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
+	m_stmnberRender.Init("Assets/sprite/HPBer.dds", 525.0f, 44.0f);
 	//表示する座標を設定する。
-	m_stmnberRender.SetPosition({ -694.0f,430.0f ,0.0f });
+	m_stmnberRender.SetPosition({ -692.0f,430.0f ,0.0f });
 	m_HPRender.SetPivot({ 0.0f, 0.5f });
 
-	m_staminaRender.Init("Assets/sprite/HP.dds", 512.0f, 32.0f);
+	m_staminaRender.Init("Assets/sprite/SP.dds", 512.0f, 32.0f);
 	//表示する座標を設定する。
 	m_staminaRender.SetPosition({ -950.0f,430.0f ,0.0f });
 	m_staminaRender.SetPivot({ 0.0f, 0.5f });
 
-	m_portionRender.Init("Assets/sprite/Portion.dds", 200, 200);
+	m_portionRender.Init("Assets/sprite/Portion1.dds", 300, 300);
 	m_portionRender.SetPosition({ 800.0f, -300.0f, 0.0f });
 
 	m_statusRender.Init("Assets/sprite/status.dds", 553, 324);
@@ -141,10 +141,10 @@ void Player::Update()
 
 		if (m_menu == true)
 		{
-			m_HPberRender.SetPosition({ 331.0f,380.0f ,0.0f });
-			m_HPRender.SetPosition({ 75.0f,380.0f ,0.0f });
-			m_stmnberRender.SetPosition({ 331.0f,260.0f ,0.0f });
-			m_staminaRender.SetPosition({ 75.0f,260.0f ,0.0f });
+			m_HPberRender.SetPosition({ 331.0f,330.0f ,0.0f });
+			m_HPRender.SetPosition({ 75.0f,330.0f ,0.0f });
+			m_stmnberRender.SetPosition({ 331.0f,210.0f ,0.0f });
+			m_staminaRender.SetPosition({ 75.0f,210.0f ,0.0f });
 		}
 		else {
 			m_HPberRender.SetPosition({ -694.0f,500.0f ,0.0f });
@@ -185,9 +185,9 @@ void Player::Update()
 		m_hp = 0.0f;
 	}
 */
-	if (m_hp >= 200.0f)
+	if (m_hp >= 100.0f)
 	{
-		m_hp = 200.0f;
+		m_hp = 100.0f;
 	}
 
 	life = m_hp/ 100.0f;
@@ -210,7 +210,7 @@ void Player::Update()
 	if (COOLtime == true)
 	{
 		cooltime += g_gameTime->GetFrameDeltaTime();
-		if (m_sutamina >= 150.0f)
+		if (m_sutamina >= 50.0f)
 		{
 			COOLtime = false;
 		}
@@ -223,7 +223,7 @@ void Player::Update()
 	{
 		m_hp++;
 		m_sutamina++;
-		if (m_hp == genHP + 50 || m_hp >= 200.0f)
+		if (m_hp == genHP + 50 || m_hp >= 100.0f)
 		{
 			kaihuku = false;
 		}
@@ -575,12 +575,12 @@ void Player::Attack()
 		MakeAttackCollision();
 	}
 
-	//攻撃判定中であれば。
+/*	//攻撃判定中であれば。
 	if (m_isEffect == true)
 	{
 		MakeAttackEffect();
 	}
-	
+*/
 }
 
 void Player::Heal()
@@ -663,7 +663,7 @@ void Player::ProcessCommonStateTransition()
 		m_playerState = enPlayerState_Attack;
 		//フラグをfalseにする。
 		m_isUnderAttack = false;
-		m_isEffect = false;
+		//m_isEffect = false;
 		return;
 	}
 	
@@ -931,7 +931,7 @@ void Player::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 	}
 
 	//キーの名前が「Effect_start」の時。
-	if (wcscmp(eventName, L"Effect_start") == 0) {
+/*	if (wcscmp(eventName, L"Effect_start") == 0) {
 		//回復中にする。
 		m_isEffect = true;
 	}
@@ -940,14 +940,15 @@ void Player::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 		//回復中にする。
 		m_isEffect = false;
 	}
+	*/
 }
 
 void Player::Render(RenderContext& rc)
 {
 
-	m_HPberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 0.9f));
+//	m_HPberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 0.9f));
 	m_HPberRender.Draw(rc);
-	m_stmnberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 0.9f));
+//	m_stmnberRender.SetMulColor(Vector4(1.0f, 0.0f, 0.0f, 0.9f));
 	m_stmnberRender.Draw(rc);
 
 	//モデルを描画する。

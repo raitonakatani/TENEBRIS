@@ -2,6 +2,7 @@
 
 class fastPlayer;
 class WarpCounter;
+class Telop;
 //class Player;
 class warp : public IGameObject
 {
@@ -44,6 +45,9 @@ private:
 	Quaternion				m_rotation;				//クォータニオン。
 	fastPlayer*				m_fastplayer;			//プレイヤー。
 	WarpCounter*			warpCounter = nullptr;
+	Telop* m_telop;
+
+	float m_timer = 0.0f;
 	//bool mozi = false;
 	//Player* m_player;
 	//SoundSource* se;                    //se

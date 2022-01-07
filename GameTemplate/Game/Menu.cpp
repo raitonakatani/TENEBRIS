@@ -6,9 +6,9 @@
 bool Menu::Start()
 {
 
-	m_menuRender.Init("Assets/sprite/menu.dds",1800.0f, 1050.0f);
-	m_mapRender.Init("Assets/sprite/map.dds", 900.0f, 1050.0f);
-	m_mapRender.SetPosition({ -450.0f,0.0f,0.0f });
+	m_menuRender.Init("Assets/sprite/menu1.dds",1920.0f, 1080.0f);
+//	m_mapRender.Init("Assets/sprite/map.dds", 900.0f, 1050.0f);
+//	m_mapRender.SetPosition({ -450.0f,0.0f,0.0f });
 
 	m_player = FindGO<Player>("player");
 
@@ -29,7 +29,7 @@ void Menu::Update()
 	//文字の大きさを変える。
 	//m_HPRender.SetScale(5.0f);
 	//表示する座標を設定する。
-	m_HPRender.SetPosition(Vector3{ 330.0f,460.0f,0.0f });
+	m_HPRender.SetPosition(Vector3{ 240.0f,415.0f,0.0f });
 
 	wchar_t wcsbuf2[256];
 	swprintf_s(wcsbuf2, 256, L"%d", int(Stamina/1.5));
@@ -37,7 +37,7 @@ void Menu::Update()
 	//文字の大きさを変える。
 	//m_HPRender.SetScale(5.0f);
 	//表示する座標を設定する。
-	m_StaminaRender.SetPosition(Vector3{ 530.0f,340.0f,0.0f });
+	m_StaminaRender.SetPosition(Vector3{ 440.0f,290.0f,0.0f });
 
 	wchar_t wcsbuf3[256];
 	swprintf_s(wcsbuf3, 256, L"%d", int(Attack));
@@ -45,7 +45,7 @@ void Menu::Update()
 	//文字の大きさを変える。
 	//m_HPRender.SetScale(5.0f);
 	//表示する座標を設定する。
-	m_AttackRender.SetPosition(Vector3{ 470.0f,220.0f,0.0f });
+	m_AttackRender.SetPosition(Vector3{ 380.0f,160.0f,0.0f });
 
 	wchar_t wcsbuf4[256];
 	swprintf_s(wcsbuf4, 256, L"%d", int(portion));
@@ -53,18 +53,18 @@ void Menu::Update()
 	//文字の大きさを変える。
 	//m_HPRender.SetScale(5.0f);
 	//表示する座標を設定する。
-	m_portionRender.SetPosition(Vector3{ 370.0f,100.0f,0.0f });
+	m_portionRender.SetPosition(Vector3{ 290.0f,40.0f,0.0f });
 
 	m_menuRender.Update();
-	m_mapRender.Update();
+//	m_mapRender.Update();
 }
 
 void Menu::Render(RenderContext&rc)
 {
 	m_menuRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.9f));
 	m_menuRender.Draw(rc);
-	m_mapRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.9f));
-	m_mapRender.Draw(rc);
+//	m_mapRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.9f));
+//	m_mapRender.Draw(rc);
 
 
 	m_HPRender.Draw(rc);

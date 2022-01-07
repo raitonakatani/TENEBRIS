@@ -86,7 +86,20 @@ void fastPlayer::Update()
 {
 	warpCounter = FindGO<WarpCounter>("WarpCounter");
 
-	if (warpCounter->warpCounter == 0) {
+	if (MOVED >= 3)
+	{
+		MOVED = 0;
+	}
+
+	if(MOVED !=0)
+	{
+		//アニメーションの再生。
+		PlayAnimation();
+		//ステートの遷移処理。
+		ManageState();
+	}
+
+	if (warpCounter->warpCounter == 0 && MOVED == 0) {
 
 		//移動処理。
 		Move();

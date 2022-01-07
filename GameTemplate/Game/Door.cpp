@@ -36,9 +36,13 @@ bool Door::Start()
 	//回転を設定する。
 	m_modelRender.SetRotation(m_rotation);
 
-	m_telopRender.Init("Assets/sprite/huti.dds", 800.0f, 200.0f);
+	m_telopRender.Init("Assets/sprite/huti.dds", 1200.0f, 400.0f);
 	//表示する座標を設定する。
-	m_telopRender.SetPosition({ 0.0f,-300.0f ,0.0f });
+	m_telopRender.SetPosition({ 0.0f,-350.0f ,0.0f });
+
+	m_kaiwa1Render.Init("Assets/sprite/door1.dds", 1024.0f, 512.0f);
+	//表示する座標を設定する。
+	m_kaiwa1Render.SetPosition({ -160.0f,-350.0f ,0.0f });
 
 	m_player = FindGO<Player>("player");
 
@@ -70,6 +74,7 @@ void Door::Update()
 		{
 			if (m_doorState == enDoorState_Open_Idle)
 			{
+				boss->PlusBOSSBEYA();
 				SoundSource* doorse = NewGO<SoundSource>(0);
 				doorse->Init(8);
 				doorse->Play(false);
@@ -106,14 +111,14 @@ void Door::Update()
 				m_game->GetsibouEnemy() == 17 
 				)
 			{
-				m_fontRender.SetText(L"扉を開ける。\n \n Aボタン");
+/*				m_fontRender.SetText(L"扉を開ける。\n \n Aボタン");
 				//表示する座標を設定する。
-				m_fontRender.SetPosition({ -150.0f,-250.0f,0.0f });
+				m_fontRender.SetPosition({ -150.0f,-2500.0f,0.0f });
 				//文字の大きさを変える。
 				//m_fontRender.SetScale(1.5f);
 				//表示する色を設定する。
 				m_fontRender.SetColor(g_vec4White);
-
+*/
 			
 					if (g_pad[0]->IsTrigger(enButtonA))
 					{
@@ -147,6 +152,7 @@ void Door::Update()
 
 	//モデルの更新。
 	m_modelRender.Update();
+	m_kaiwa1Render.Update();
 	m_telopRender.Update();
 }
 
@@ -323,6 +329,7 @@ void Door::Render(RenderContext& rc)
 		m_telopRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.7f));
 		m_telopRender.Draw(rc);
 		//文字を描写する。
+		m_kaiwa1Render.Draw(rc);
 		m_fontRender.Draw(rc);
 
 	}

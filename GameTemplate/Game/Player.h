@@ -279,7 +279,7 @@ private:
 	bool					m_isUnderHeal = false;						//回復中ならtrue。
 	bool					m_isEffect = false;						//エフェクト再生中ならtrue。
 	bool					m_menu = false;
-	float					m_hp = 200.0f;								//プレイヤーのHP。
+	float					m_hp = 100.0f;								//プレイヤーのHP。
 	float					life = 100.0f;								//フルHPバー
 	int                     m_sword_jointBoneId = -1;                   //「Sword」ボーンのID。
 	int                     m_sword_jointBoneId2 = -1;                   //「Sword」ボーンのID。

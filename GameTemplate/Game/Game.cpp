@@ -210,10 +210,10 @@ bool Game::Start()
 
 	//m_skycube = NewGO<SkyCube>(0, "skycube");
 
-	m_TIMER = NewGO<TIMER>(0, "m_timer");
+	//m_TIMER = NewGO<TIMER>(0, "m_timer");
 
 	m_Warp = NewGO<warp>(0, "warp");
-	m_Warp->SetPosition({ 0.0f,850.0f,-10000.0f });
+	m_Warp->SetPosition({ 0.0f,800.0f,-10000.0f });
 
 	g_camera3D->SetPosition({ 0.0f, 100.0f, -600.0f });
 	m_camera = NewGO<CAMERA>(0, "m_camera");

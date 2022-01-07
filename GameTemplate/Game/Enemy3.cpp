@@ -135,31 +135,8 @@ void Enemy3::Update()
 	Vector3 diff = m_player->GetPosition() - m_position;
 
 	//ベクトルの長さが1200.0fより小さかったら。
-	if (diff.Length() <= 1200.0f)
+	if (m_bossbeya >= 1)
 	{
-	/*	
-		//ワールド座標に変換。
-		//座標をエネミーの少し上に設定する。
-		Vector4 worldPos = Vector4(m_position.x, m_position.y + 400.0f, m_position.z, 1.0f);
-
-		Matrix matrix;
-		matrix.Multiply(g_camera3D->GetViewMatrix(), g_camera3D->GetProjectionMatrix());
-
-		matrix.Apply(worldPos);
-
-		//カメラのビュー行列を掛ける。
-		//カメラ座標に変換。
-		worldPos.x = (worldPos.x / worldPos.w);
-		worldPos.y = (worldPos.y / worldPos.w);
-
-		//カメラのプロジェクション行列を掛ける。
-		//スクリーン座標に変換。
-		worldPos.x *= FRAME_BUFFER_W / 2;
-		worldPos.y *= FRAME_BUFFER_H / 2;
-
-		//ポジションの設定。
-		m_spriteRender.SetPosition(Vector3(worldPos.x, worldPos.y, 0.0f));
-	*/
 		//HPバーを表示する。
 		m_isShowHPBar = true;
 	}
