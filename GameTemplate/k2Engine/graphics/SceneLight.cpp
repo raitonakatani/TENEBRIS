@@ -14,9 +14,9 @@ namespace nsK2Engine {
     void SceneLight::Init()
     {
         // ‘¾—zŒõ
-        m_light.directionalLight[0].color.x = 2.5f;
-        m_light.directionalLight[0].color.y = 2.5f;
-        m_light.directionalLight[0].color.z = 2.5f;
+        m_light.directionalLight[0].color.x = 1.5f;
+        m_light.directionalLight[0].color.y = 1.5f;
+        m_light.directionalLight[0].color.z = 1.5f;
 
 
 
